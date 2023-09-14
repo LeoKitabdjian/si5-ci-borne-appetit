@@ -1,0 +1,30 @@
+@import "/public/variables"
+
+.Item
+  width: 100%
+  cursor: pointer
+
+  .Title
+    font-size: 1.25vh
+    margin-bottom: 0.25vh
+    font-weight: 500
+    text-transform: uppercase
+
+  .Image
+    position: relative
+
+    img
+      aspect-ratio: 4/5
+      border-radius: 1vh
+      width: 100%
+      object-fit: cover
+
+    .Price
+      font-size: 1.5vh
+      position: absolute
+      background: $main
+      color: $main-color
+      bottom: 0.75vh
+      right: 0.75vh
+      padding: 0.25vh 0.5vh
+      border-radius: 0.5vh

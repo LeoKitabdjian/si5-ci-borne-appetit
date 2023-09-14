@@ -1,0 +1,36 @@
+@import "/public/variables"
+
+.Button
+  font-size: 1.75vh
+  flex: 1
+  padding: 1.25vh 2vh
+  border-radius: 0.75vh
+  font-weight: 600
+  letter-spacing: 0.25vh
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2)
+  cursor: pointer
+
+  &.Full
+    font-size: 2.25vh
+    padding: 2vh 4vh
+    border-radius: 1vh
+    font-weight: 600
+    letter-spacing: 0.25vh
+    box-shadow: none
+    flex: none
+
+  &.primary
+    background-color: $main
+    color: $main-color
+
+  &.danger
+    background-color: #ff0000
+    color: white
+
+  &.success
+    background-color: #00ff00
+    color: white
+
+  &.info
+    background-color: #4646e5
+    color: white

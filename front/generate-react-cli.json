@@ -13,7 +13,7 @@
       "withLazy": false,
       "customTemplates": {
         "component": "templates/default/TemplateName.tsx",
-        "style": "templates/default/TemplateName.style.sass"
+        "style": "templates/default/TemplateName.module.sass"
       }
     },
     "page": {
@@ -24,7 +24,7 @@
       "withLazy": false,
       "customTemplates": {
         "component": "templates/page/TemplateName.tsx",
-        "style": "templates/page/TemplateName.style.sass"
+        "style": "templates/page/TemplateName.module.sass"
       }
     }
   }

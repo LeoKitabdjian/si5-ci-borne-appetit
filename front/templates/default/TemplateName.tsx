@@ -1,6 +1,5 @@
 import React from 'react';
-// @ts-ignore
-import styles from './TemplateName.style.sass';
+import styles from './TemplateName.module.sass';
 
 interface TemplateNameProps {}
 

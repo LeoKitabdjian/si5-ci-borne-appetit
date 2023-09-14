@@ -1,0 +1,41 @@
+@import "/public/variables"
+
+.Standby
+  width: 100%
+  height: 100%
+  cursor: pointer
+  display: flex
+  flex-direction: column
+  *
+    user-select: none
+
+  header
+    background: url("/images/standby_header.jpg") no-repeat center
+    background-size: cover
+    mask: url("/images/standby_header_mask.svg") no-repeat center
+    mask-size: cover
+    height: 33vh
+    width: 100%
+
+  main
+    padding: 4vh
+    text-transform: uppercase
+    flex: auto
+    display: flex
+    flex-direction: column
+    justify-content: space-evenly
+
+    h1
+      font-size: 4vh
+      font-weight: 700
+      span
+        color: $main
+
+    h2
+      font-size: 2.5vh
+
+    .title
+      display: flex
+      flex-direction: column
+      justify-content: space-around
+      height: 25vh

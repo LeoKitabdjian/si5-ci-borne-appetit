@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Item.module.sass';
 
 interface ItemProps {
-    onClick: (key: string) => void;
+    addItemFunction: (key: string) => void;
     name: string;
     price: string;
     id: string;
@@ -18,14 +18,14 @@ class Item extends React.Component<ItemProps, ItemState> {
         this.state = {};
     }
 
-    addArticle = () => {
-        this.props.onClick(this.props.id);
+    addItem = () => {
+        this.props.addItemFunction(this.props.id);
     }
 
 
     render() {
         return (
-            <article className={styles.Item} onClick={this.addArticle}>
+            <article className={styles.Item} onClick={this.addItem}>
                 <div className={styles.Title}>
                     {this.props.name}
                 </div>

@@ -1,56 +1,83 @@
-import React, {FC} from 'react';
+import React from 'react';
 import styles from './Ordering.module.sass';
 import {useNavigate} from "react-router-dom";
+
 import Button from "../../components/Button/Button";
 import {ButtonType} from "../../components/Button/ButtonType";
 import Category from "../../components/Category/Category";
-import Item from "../../components/Item/Item";
+import ItemList from "../../components/Articles/ItemList";
+import {getMenu} from "../../services/MenuService";
 
 interface OrderingProps {
 }
 
-const Ordering: FC<OrderingProps> = () => {
-    const navigate = useNavigate();
+interface OrderingState {
+    activeCategory: string;
+    menu: any;
+}
 
-    const goBack = () => navigate('/');
-    const order = () => navigate('/ordering');
+class Ordering extends React.Component<OrderingProps, OrderingState> {
 
-    const addArticle = (key: string) => {
+    constructor(props: OrderingProps) {
+        super(props);
+        let menu = getMenu();
+        this.state = {
+            activeCategory: menu[0].id,
+            menu: menu
+        }
+    }
+
+    addItemToOrder = (key: string) => {
         console.log("addArticle", key);
     }
 
-    function randomString() {
-        return Math.random().toString(36).substring(5);
+    setCurrentCategory = (key: string) => {
+        this.setState({
+            activeCategory: key
+        });
     }
 
-    function randomPrice() {
-        let price = (Math.random() * 100).toFixed(2);
-        return price.replace('.', ',');
+    isActive(id: string) {
+        return this.state.activeCategory === id;
     }
 
-    return (<div className={styles.Ordering}>
-        <main>
-            <h1>Titre</h1>
-            <section className={styles.Categories}>
-                <Category/>
-                <Category/>
-                <Category/>
-            </section>
-            <h1>Titre</h1>
-            <section className={styles.Items}>
-                <Item onClick={addArticle} name={"Nom de l'article"} img={"/images/example.jpg"} price={randomPrice()} id={randomString()}/>
-                <Item onClick={addArticle} name={"Nom de l'article"} img={"/images/example.jpg"} price={randomPrice()} id={randomString()}/>
-                <Item onClick={addArticle} name={"Nom de l'article"} img={"/images/example.jpg"} price={randomPrice()} id={randomString()}/>
-                <Item onClick={addArticle} name={"Nom de l'article"} img={"/images/example.jpg"} price={randomPrice()} id={randomString()}/>
-                <Item onClick={addArticle} name={"Nom de l'article"} img={"/images/example.jpg"} price={randomPrice()} id={randomString()}/>
-                <Item onClick={addArticle} name={"Nom de l'article"} img={"/images/example.jpg"} price={randomPrice()} id={randomString()}/>
-            </section>
-        </main>
-        <div className={styles.Actions}>
-            <Button type={ButtonType.Danger} text={"Annuler"} onClick={goBack}/>
-            <Button type={ButtonType.Info} text={"Commander"} onClick={order}/>
-        </div>
-    </div>);
-};
+    render() {
+        return (<div className={styles.Ordering}>
+            <main>
+                <section className={styles.Categories}>
+                    <h1>Catégories</h1>
+                    {this.state.menu.map((category: any, index: number) => <Category id={category.id}
+                                                                                     changeCategoryFunction={this.setCurrentCategory}
+                                                                                     name={category.id}
+                                                                                     key={index}/>)}
+                </section>
+                <section className={styles.ItemList}>
+                    <h1>Produits</h1>
+                    {this.state.menu.map((category: any, index: number) => <ItemList id={category.id}
+                                                                                     items={category.items}
+                                                                                     addItemFunction={this.addItemToOrder}
+                                                                                     isActive={this.isActive(category.id)}
+                                                                                     key={index}/>)}
+                </section>
+            </main>
+            <div className={styles.Actions}>
+                <GoBackButton/>
+                <OrderButton/>
+            </div>
+        </div>);
+    }
+}
+
+function GoBackButton() {
+    const navigate = useNavigate();
+    const nav = () => navigate('/');
+    return (<Button type={ButtonType.Danger} text={"Annuler"} onClick={nav}/>);
+}
+
+function OrderButton() {
+    const navigate = useNavigate();
+    const nav = () => navigate('/ordering');
+    return (<Button type={ButtonType.Info} text={"Commander"} onClick={nav}/>);
+}
 
 export default Ordering;

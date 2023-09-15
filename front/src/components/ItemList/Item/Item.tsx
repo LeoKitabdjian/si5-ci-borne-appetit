@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Item.module.sass';
 
 interface ItemProps {
-    addItemFunction: (key: string) => void;
+    addItemToOrder: (key: string) => void;
     name: string;
     price: string;
     id: string;
@@ -19,7 +19,7 @@ class Item extends React.Component<ItemProps, ItemState> {
     }
 
     addItem = () => {
-        this.props.addItemFunction(this.props.id);
+        this.props.addItemToOrder(this.props.id);
     }
 
 

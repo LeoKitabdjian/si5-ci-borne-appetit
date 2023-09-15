@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import Button from "../../components/Button/Button";
 import {ButtonType} from "../../components/Button/ButtonType";
 import Category from "../../components/Category/Category";
-import ItemList from "../../components/Articles/ItemList";
+import ItemList from "../../components/ItemList/ItemList";
 import {getMenu} from "../../services/MenuService";
 
 interface OrderingProps {
@@ -44,19 +44,19 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
     render() {
         return (<div className={styles.Ordering}>
             <main>
+                <h1>Catégories</h1>
                 <section className={styles.Categories}>
-                    <h1>Catégories</h1>
                     {this.state.menu.map((category: any, index: number) => <Category id={category.id}
                                                                                      changeCategoryFunction={this.setCurrentCategory}
                                                                                      name={category.id}
                                                                                      key={index}/>)}
                 </section>
                 <section className={styles.ItemList}>
-                    <h1>Produits</h1>
                     {this.state.menu.map((category: any, index: number) => <ItemList id={category.id}
                                                                                      items={category.items}
-                                                                                     addItemFunction={this.addItemToOrder}
+                                                                                     addItemToOrder={this.addItemToOrder}
                                                                                      isActive={this.isActive(category.id)}
+                                                                                     name={category.id}
                                                                                      key={index}/>)}
                 </section>
             </main>

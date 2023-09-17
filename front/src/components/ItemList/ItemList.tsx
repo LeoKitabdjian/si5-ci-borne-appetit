@@ -24,7 +24,7 @@ class ItemList extends React.Component<ItemListProps, ItemListState> {
     render() {
         return <>
             {this.props.isActive && <>
-                <h1>{this.props.name}</h1>
+                <h1><span>{this.props.name}</span></h1>
                 <div className={styles.ItemList}>
                     {this.props.items.map((item, index) => <Item addItemToOrder={this.props.addItemToOrder}
                                                                  name={item.fullName}

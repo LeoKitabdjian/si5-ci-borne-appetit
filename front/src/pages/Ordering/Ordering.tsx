@@ -44,11 +44,12 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
     render() {
         return (<div className={styles.Ordering}>
             <main>
-                <h1>Catégories</h1>
+                <h1><span>Catégories</span></h1>
                 <section className={styles.Categories}>
                     {this.state.menu.map((category: any, index: number) => <Category id={category.id}
                                                                                      changeCategoryFunction={this.setCurrentCategory}
                                                                                      name={category.id}
+                                                                                     isActive={this.isActive(category.id)}
                                                                                      key={index}/>)}
                 </section>
                 <section className={styles.ItemList}>

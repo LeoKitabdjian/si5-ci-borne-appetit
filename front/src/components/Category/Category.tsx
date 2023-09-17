@@ -5,9 +5,11 @@ interface CategoryProps {
     id: string;
     changeCategoryFunction: (key: string) => void;
     name: string;
+    isActive: boolean;
 }
 
-interface CategoryState {}
+interface CategoryState {
+}
 
 class Category extends React.Component<CategoryProps, CategoryState> {
 
@@ -21,11 +23,10 @@ class Category extends React.Component<CategoryProps, CategoryState> {
     }
 
     render() {
-        return (
-            <div className={styles.Category} onClick={this.changeCategoryFunction}>
-                {this.props.name}
-            </div>
-        );
+        return <div className={styles.Category + ' ' + (this.props.isActive ? styles.active : "")}
+                    onClick={this.changeCategoryFunction}>
+            {this.props.name}
+        </div>;
     }
 }
 

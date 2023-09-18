@@ -25,12 +25,14 @@ class ItemList extends React.Component<ItemListProps, ItemListState> {
         return <div className={this.props.isActive ? "" : styles.hidden}>
                 <h1><span>{this.props.name}</span></h1>
                 <div className={styles.ItemList}>
-                    {this.props.items.map((item, index) => <Item addItemToOrder={this.props.addItemToOrder}
-                                                                 name={item.fullName}
-                                                                 img={item.image}
-                                                                 price={item.price}
-                                                                 id={item._id}
-                                                                 key={index}/>)}
+                    {Object.entries(this.props.items).map(([id, item], index) =>
+                        <Item addItemToOrder={this.props.addItemToOrder}
+                              name={item.name}
+                              img={item.image}
+                              price={item.price}
+                              id={id}
+                              key={index}/>
+                    )}
                 </div>
         </div>;
     }

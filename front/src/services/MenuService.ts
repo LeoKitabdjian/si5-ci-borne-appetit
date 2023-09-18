@@ -210,6 +210,20 @@ let json = [{
     "image": "https://cdn.pixabay.com/photo/2014/12/11/02/56/coffee-563797_960_720.jpg"
 }]
 
+export const getItems = (): any => {
+    let items = {};
+    json.forEach(item => {
+        // @ts-ignore
+        items[item._id] = {
+            name: item.fullName,
+            shortName: item.shortName,
+            price: item.price,
+            category: item.category,
+        };
+    })
+    return items;
+}
+
 export const getMenu = (): any => {
     return json.reduce((acc, item) => {
         // @ts-ignore
@@ -218,18 +232,17 @@ export const getMenu = (): any => {
             // @ts-ignore
             categoryObj = {
                 id: item.category,
-                items: []
+                items: {}
             };
             // @ts-ignore
             acc.push(categoryObj);
         }
         // @ts-ignore
-        categoryObj.items.push({
-            _id: item._id,
-            fullName: item.fullName,
-            price: item.price,
-            image: item.image
-        });
+        categoryObj.items[item._id] = {
+            name: item.fullName,
+            image: item.image,
+            price: item.price
+        };
         return acc;
     }, []);
 }

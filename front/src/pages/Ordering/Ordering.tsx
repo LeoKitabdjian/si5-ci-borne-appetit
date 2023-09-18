@@ -6,7 +6,8 @@ import Button from "../../components/Button/Button";
 import {ButtonType} from "../../components/Button/ButtonType";
 import Category from "../../components/Category/Category";
 import ItemList from "../../components/ItemList/ItemList";
-import {getMenu} from "../../services/MenuService";
+import {getItems, getMenu} from "../../services/MenuService";
+import Selection from "../../components/Selection/Selection";
 
 interface OrderingProps {
 }
@@ -14,6 +15,7 @@ interface OrderingProps {
 interface OrderingState {
     activeCategory: string;
     menu: any;
+    order: OrderItem[];
 }
 
 class Ordering extends React.Component<OrderingProps, OrderingState> {
@@ -23,12 +25,18 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
         let menu = getMenu();
         this.state = {
             activeCategory: menu[0].id,
-            menu: menu
+            menu: menu,
+            order: []
         }
     }
 
     addItemToOrder = (key: string) => {
-        console.log("addArticle", key);
+        let order = this.state.order;
+        let index = order.findIndex((item: OrderItem) => item.id === key);
+        if (index === -1) order.push({id: key, quantity: 1}); else order[index].quantity++;
+        this.setState({
+            order: order
+        });
     }
 
     setCurrentCategory = (key: string) => {
@@ -61,6 +69,7 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
                                                                                      key={index}/>)}
                 </section>
             </main>
+            <Selection items={getItems()} order={this.state.order}/>
             <div className={styles.Actions}>
                 <GoBackButton/>
                 <OrderButton/>

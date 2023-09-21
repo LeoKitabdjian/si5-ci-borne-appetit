@@ -29,3 +29,5 @@ type Category = {
     id: string;
     items: ItemList;
 }
+
+type Menu = Category[];

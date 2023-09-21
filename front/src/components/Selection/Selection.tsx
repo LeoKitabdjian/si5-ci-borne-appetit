@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './Selection.module.sass';
 import Item from "./Item/Item";
-import {getItems} from "../../services/MenuService";
 
 interface SelectionProps {
     order: OrderItem[];

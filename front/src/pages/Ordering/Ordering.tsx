@@ -14,7 +14,7 @@ interface OrderingProps {
 
 interface OrderingState {
     activeCategory: string;
-    menu: Category[];
+    menu: Menu;
     order: OrderItem[];
 }
 

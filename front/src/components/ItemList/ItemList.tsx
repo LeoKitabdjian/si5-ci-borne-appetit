@@ -23,6 +23,7 @@ class ItemList extends React.Component<ItemListProps, ItemListState> {
 
     render() {
         return <div className={this.props.isActive ? "" : styles.hidden}>
+            <input type="text"/>
                 <div className={styles.ItemList}>
                     {Object.entries(this.props.items).map(([id, item], index) =>
                         <Item addItemToOrder={this.props.addItemToOrder}

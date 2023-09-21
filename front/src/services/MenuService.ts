@@ -1,3 +1,5 @@
+import Category from "../components/Category/Category";
+
 let json = [{
     "_id": "650404b97a9a24d8341a48c2",
     "fullName": "Homemade foie gras terrine",
@@ -224,25 +226,42 @@ export const getItems = (): any => {
     return items;
 }
 
-export const getMenu = (): any => {
-    return json.reduce((acc, item) => {
-        // @ts-ignore
-        let categoryObj = acc.find(cat => cat.id === item.category);
-        if (!categoryObj) {
-            // @ts-ignore
-            categoryObj = {
-                id: item.category,
-                items: {}
-            };
-            // @ts-ignore
-            acc.push(categoryObj);
-        }
-        // @ts-ignore
-        categoryObj.items[item._id] = {
-            name: item.fullName,
-            image: item.image,
-            price: item.price
-        };
-        return acc;
-    }, []);
+export const getMenu = (): Menu => {
+    let menu: Menu = [];
+    let categories = new Set<string>();
+    json.forEach(item => {
+        categories.add(item.category);
+    })
+    categories.forEach(category => {
+        let items: ItemList = {};
+        json.forEach(item => {
+            if (item.category === category) {
+                items[item._id] = {
+                    name: item.fullName,
+                    price: item.price,
+                    image: item.image,
+                };
+            }
+        })
+        menu.push({
+            id: category,
+            items: items,
+        })
+    })
+    menu.forEach(category => {
+        const itemsArray = Object.entries(category.items).map(([key, item]) => ({ key, item }));
+
+        itemsArray.sort((a, b) => {
+            if (a.item.name < b.item.name) return -1;
+            if (a.item.name > b.item.name) return 1;
+            return 0;
+        });
+
+        let sortedItems: { [key: string]: any } = {};
+        itemsArray.forEach(({ key, item }) => {
+            sortedItems[key] = item;
+        });
+        category.items = sortedItems;
+    });
+    return menu;
 }

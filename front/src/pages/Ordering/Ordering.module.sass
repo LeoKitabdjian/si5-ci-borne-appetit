@@ -2,6 +2,8 @@
 
 .Ordering
   display: grid
+  grid-template-rows: auto min-content
+  height: 100vh
 
   h1
     background: $main
@@ -20,12 +22,14 @@
 
   main
     padding: 4vh 4vh 2vh
+    display: flex
+    flex-direction: column
+    gap: 2vh
 
     .Categories
       display: flex
       justify-content: space-around
       gap: 2vh
-      margin-bottom: 2vh
 
   .Actions
     display: flex

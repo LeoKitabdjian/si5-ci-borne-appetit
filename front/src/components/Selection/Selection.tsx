@@ -1,10 +1,11 @@
 import React from 'react';
 import styles from './Selection.module.sass';
 import Item from "./Item/Item";
+import {getItems} from "../../services/MenuService";
 
 interface SelectionProps {
     order: OrderItem[];
-    items: any;
+    items: Items;
 }
 
 interface SelectionState {
@@ -17,37 +18,29 @@ class Selection extends React.Component<SelectionProps, SelectionState> {
         this.state = {};
     }
 
-    getTotalItems(): number {
-        let i = 0;
-        for(let item of this.props.order) {
-            i += item.quantity
-        }
-        return i;
-    }
+    getItem = (id: string): VeryBasicItem => this.props.items[id];
 
-    getTotalPrice(): number {
-        let price = 0;
-        for(let item of this.props.order) {
-            price += this.props.items[item.id].price * item.quantity
-        }
-        return price;
-    }
+    getTotalItems = (): number => this.props.order.reduce((total, item) => total + item.quantity, 0);
+
+    getTotalPrice = (): number => this.props.order.reduce((total, item) => total + this.getItem(item.id).price * item.quantity, 0);
 
     render() {
         return <div className={styles.Selection}>
-                <div className={styles.Header}>
-                    <h1>Votre commande</h1>
-                </div>
-                <div className={styles.Selection}>
-                    {this.props.order.map((item: OrderItem, index: number) => <Item key={index} quantity={item.quantity}
-                                                                                    id={item.id}
-                                                                                    name={this.props.items[item.id].name}
-                                                    />)}
-                </div>
-                <div className={styles.Footer}>
-                    Total : {this.getTotalItems()} articles {this.getTotalPrice()} euros
-                </div>
-            </div>;
+            <div className={styles.Header}>
+                <h1>Votre commande</h1>
+            </div>
+            <div className={styles.Items}>
+                {this.props.order.map((item: OrderItem, index: number) => {
+                    return <Item key={index} quantity={item.quantity}
+                                 id={item.id}
+                                 name={this.getItem(item.id).name}
+                    />
+                })}
+            </div>
+            <div className={styles.Footer}>
+                Total : {this.getTotalItems()} articles {this.getTotalPrice()} euros
+            </div>
+        </div>;
     }
 }
 

@@ -14,7 +14,7 @@ interface OrderingProps {
 
 interface OrderingState {
     activeCategory: string;
-    menu: any;
+    menu: Category[];
     order: OrderItem[];
 }
 
@@ -24,9 +24,7 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
         super(props);
         let menu = getMenu();
         this.state = {
-            activeCategory: menu[0].id,
-            menu: menu,
-            order: []
+            activeCategory: menu[0].id, menu: menu, order: []
         }
     }
 
@@ -45,36 +43,40 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
         });
     }
 
-    isActive(id: string) {
-        return this.state.activeCategory === id;
-    }
+    isActive = (id: string) => this.state.activeCategory === id;
 
     render() {
-        return (<div className={styles.Ordering}>
+        return <div className={styles.Ordering}>
             <main>
-                <h1><span>Catégories</span></h1>
-                <section className={styles.Categories}>
-                    {this.state.menu.map((category: any, index: number) => <Category id={category.id}
-                                                                                     changeCategoryFunction={this.setCurrentCategory}
-                                                                                     name={category.id}
-                                                                                     isActive={this.isActive(category.id)}
-                                                                                     key={index}/>)}
+                <section>
+                    <section className={styles.Categories}>
+                        {this.state.menu.map((category: any, index: number) => {
+                            return <Category id={category.id}
+                                             changeCategoryFunction={this.setCurrentCategory}
+                                             name={category.id}
+                                             isActive={this.isActive(category.id)}
+                                             key={index}/>
+                        })}
+                    </section>
                 </section>
-                <section className={styles.ItemList}>
-                    {this.state.menu.map((category: any, index: number) => <ItemList id={category.id}
-                                                                                     items={category.items}
-                                                                                     addItemToOrder={this.addItemToOrder}
-                                                                                     isActive={this.isActive(category.id)}
-                                                                                     name={category.id}
-                                                                                     key={index}/>)}
+                <section>
+                    {this.state.menu.map((category: any, index: number) => {
+                        return <ItemList id={category.id}
+                                         items={category.items}
+                                         addItemToOrder={this.addItemToOrder}
+                                         isActive={this.isActive(category.id)}
+                                         name={category.id}
+                                         key={index}/>
+                    })}
                 </section>
-            </main>
+
             <Selection items={getItems()} order={this.state.order}/>
+            </main>
             <div className={styles.Actions}>
                 <GoBackButton/>
                 <OrderButton/>
             </div>
-        </div>);
+        </div>;
     }
 }
 

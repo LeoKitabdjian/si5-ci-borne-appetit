@@ -4,7 +4,7 @@ import Item from "./Item/Item";
 
 interface ItemListProps {
     id: string;
-    items: any[];
+    items: ItemList;
     addItemToOrder: (key: string) => void;
     isActive: boolean;
     name: string;
@@ -23,7 +23,6 @@ class ItemList extends React.Component<ItemListProps, ItemListState> {
 
     render() {
         return <div className={this.props.isActive ? "" : styles.hidden}>
-                <h1><span>{this.props.name}</span></h1>
                 <div className={styles.ItemList}>
                     {Object.entries(this.props.items).map(([id, item], index) =>
                         <Item addItemToOrder={this.props.addItemToOrder}

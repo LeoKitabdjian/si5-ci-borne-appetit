@@ -1,10 +1,12 @@
 @import "/public/variables"
 
 .Item
-  width: 100%
   cursor: pointer
   align-self: end
   user-select: none
+  width: calc(25% - (6vh / 4))
+  flex: 0 0 calc(25% - (6vh / 4))
+  box-sizing: border-box
 
   .Title
     font-size: 1.25vh

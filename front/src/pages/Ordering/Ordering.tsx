@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 
 import Button from "../../components/Button/Button";
 import {ButtonType} from "../../components/Button/ButtonType";
-import {getItems, getMenu} from "../../services/MenuService";
+import {findItems, getItems, getMenu} from "../../services/MenuService";
 import Selection from "../../components/Selection/Selection";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import DefaultOrdering from "../../components/DefaultOrdering/DefaultOrdering";
@@ -44,13 +44,15 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
         this.setState({search: search});
     }
 
+    getSearchedItems = (): BasicItem[] => findItems(this.state.search)
+
 
     render() {
         return <div className={styles.Ordering}>
             <main>
                 <SearchBar updateSearch={this.updateSearch}/>
                 {this.state.search === "" && <DefaultOrdering menu={this.state.menu} addItemToOrder={this.addItemToOrder}/>}
-                {this.state.search !== "" && <SearchOrdering items={this.state.items} addItemToOrder={this.addItemToOrder}/>}
+                {this.state.search !== "" && <SearchOrdering items={this.getSearchedItems()} addItemToOrder={this.addItemToOrder}/>}
                 <Selection items={this.state.items} order={this.state.order}/>
             </main>
             <div className={styles.Actions}>

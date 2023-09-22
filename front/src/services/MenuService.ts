@@ -221,14 +221,22 @@ export const getItems = (): any => {
             shortName: item.shortName,
             price: item.price,
             category: item.category,
+            image: item.image,
         };
     })
     return items;
 }
 
 export const findItems = (str: string): any => {
-    // in each items, find the str in the name
-    console.log(str);
+    let items = getItems();
+    let foundItems = {};
+    Object.keys(items).forEach(key => {
+        if (items[key].name.toLowerCase().includes(str.toLowerCase())) {
+            // @ts-ignore
+            foundItems[key] = items[key];
+        }
+    })
+    return foundItems;
 }
 
 export const getMenu = (): Menu => {

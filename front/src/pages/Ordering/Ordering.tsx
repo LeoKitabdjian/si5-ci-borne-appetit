@@ -18,6 +18,7 @@ interface OrderingState {
     menu: Menu;
     items: Items;
     search: string;
+    selectionMinimized: boolean;
 }
 
 class Ordering extends React.Component<OrderingProps, OrderingState> {
@@ -27,7 +28,7 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
         let menu = getMenu();
         let items = getItems();
         this.state = {
-            order: [], menu: menu, items: items, search: ""
+            order: [], menu: menu, items: items, search: "", selectionMinimized: true
         }
     }
 
@@ -46,14 +47,18 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
 
     getSearchedItems = (): BasicItem[] => findItems(this.state.search)
 
+    handleSelection = () => this.setState({selectionMinimized: !this.state.selectionMinimized})
 
     render() {
-        return <div className={styles.Ordering}>
+        return <div className={styles.Ordering + " " + (!this.state.selectionMinimized ? styles.HasSelection : "")}>
             <main>
-                <SearchBar updateSearch={this.updateSearch}/>
-                {this.state.search === "" && <DefaultOrdering menu={this.state.menu} addItemToOrder={this.addItemToOrder}/>}
-                {this.state.search !== "" && <SearchOrdering items={this.getSearchedItems()} addItemToOrder={this.addItemToOrder}/>}
-                <Selection items={this.state.items} order={this.state.order}/>
+                {this.state.selectionMinimized && <SearchBar updateSearch={this.updateSearch}/>}
+                {this.state.selectionMinimized && this.state.search === "" &&
+                    <DefaultOrdering menu={this.state.menu} addItemToOrder={this.addItemToOrder}/>}
+                {this.state.selectionMinimized && this.state.search !== "" &&
+                    <SearchOrdering items={this.getSearchedItems()} addItemToOrder={this.addItemToOrder}/>}
+                <Selection isOpen={!this.state.selectionMinimized} handleSelection={this.handleSelection}
+                           items={this.state.items} order={this.state.order}/>
             </main>
             <div className={styles.Actions}>
                 <GoBackButton/>

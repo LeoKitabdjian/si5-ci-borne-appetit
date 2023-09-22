@@ -18,3 +18,15 @@ $info-color: #ffffff
 
 @mixin shadow
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2)
+
+@mixin scrollbar
+  &::-webkit-scrollbar
+    width: 2vh
+  &::-webkit-scrollbar-track
+    background: $background
+  &::-webkit-scrollbar-thumb
+    background: $main
+    border-left: 1vh solid $background
+    background-clip: padding-box
+  &::-webkit-scrollbar-thumb:hover
+    background: darken($main, 10%)

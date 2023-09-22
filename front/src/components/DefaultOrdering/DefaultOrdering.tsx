@@ -45,7 +45,7 @@ class DefaultOrdering extends React.Component<DefaultOrderingProps, DefaultOrder
                                          key={index}/>;
                     })}
                 </section>
-                <section>
+                <section className={styles.Items}>
                     {this.props.menu.map((category: any, index: number) => {
                         return <ItemList id={category.id}
                                          items={category.items}

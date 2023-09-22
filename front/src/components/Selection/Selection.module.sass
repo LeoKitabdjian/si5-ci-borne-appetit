@@ -1,14 +1,39 @@
+@import "/public/variables"
+
 .Selection
   background-color: white
-  h1
-    background: white
-    padding: 0
-    span
-      padding: 0
-      background: white
+  border-radius: 1vh
+  display: grid
+  grid-template-rows: auto 1fr auto
+  height: 16vh
+
+  &.IsOpen
+    height: 83.8vh
+    .Header
+      .Collapser
+        transform: rotate(90deg)
+
+  .Header
+    position: relative
+    cursor: pointer
+
+    h1
+      background: transparent
+      padding: 1vh
+      margin-bottom: 0
+
+    .Collapser
+      background: transparent
+      position: absolute
+      right: 0
+      top: 0
+      bottom: 0
+      aspect-ratio: 1/1
+      background: url("/images/arrow.svg") no-repeat center center
+      transform: rotate(-90deg)
+
 
   .Items
-    max-height: 10vh
-    height: 10vh
-    min-height: 10vh
     overflow-y: auto
+    background: $background
+    transition: height ease 0.2s

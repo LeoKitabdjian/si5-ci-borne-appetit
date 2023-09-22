@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './SearchOrdering.module.sass';
-import Item from "../ItemList/Item/Item";
+import Item from "../Item/Item";
 
 interface SearchOrderingProps {
     addItemToOrder: (key: string) => void;

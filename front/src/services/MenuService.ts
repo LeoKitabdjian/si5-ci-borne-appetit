@@ -1,5 +1,3 @@
-import Category from "../components/Category/Category";
-
 let json = [{
     "_id": "650404b97a9a24d8341a48c2",
     "fullName": "Homemade foie gras terrine",

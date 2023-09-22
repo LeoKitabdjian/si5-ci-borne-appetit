@@ -1,3 +1,5 @@
+@import "/public/variables"
+
 .DefaultOrdering
   display: flex
   flex-direction: column
@@ -7,3 +9,8 @@
     display: flex
     justify-content: space-around
     gap: 2vh
+
+  .Items
+    height: 47vh
+    overflow-y: auto
+    @include scrollbar

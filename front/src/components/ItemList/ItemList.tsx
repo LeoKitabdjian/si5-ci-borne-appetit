@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './ItemList.module.sass';
-import Item from "./Item/Item";
+import Item from "../Item/Item";
 
 interface ItemListProps {
     id: string;
@@ -10,27 +10,22 @@ interface ItemListProps {
     name: string;
 }
 
-interface ItemListState {
-}
-
-class ItemList extends React.Component<ItemListProps, ItemListState> {
+class ItemList extends React.Component<ItemListProps> {
 
     constructor(props: ItemListProps) {
         super(props);
         this.state = {};
     }
 
-
-    render = () => <div className={this.props.isActive ? "" : styles.hidden}>
-        <div className={styles.ItemList}>
-            {Object.entries(this.props.items).map(([id, item], index) => <Item
-                addItemToOrder={this.props.addItemToOrder}
-                name={item.name}
-                img={item.image}
-                price={item.price}
-                id={id}
-                key={index}/>)}
-        </div>
+    render = () => <div className={styles.ItemList + " " + (this.props.isActive ? "" : styles.Hidden)}>
+        {Object.entries(this.props.items).map(([id, item], index) => {
+            return <Item key={index}
+                         addItemToOrder={this.props.addItemToOrder}
+                         name={item.name}
+                         img={item.image}
+                         price={item.price}
+                         id={id}/>
+        })}
     </div>;
 }
 

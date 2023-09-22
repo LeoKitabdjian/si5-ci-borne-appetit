@@ -9,6 +9,7 @@
 
   &.IsOpen
     height: 83.8vh
+
     .Header
       .Collapser
         transform: rotate(90deg)
@@ -32,8 +33,12 @@
       background: url("/images/arrow.svg") no-repeat center center
       transform: rotate(-90deg)
 
-
   .Items
     overflow-y: auto
     background: $background
     transition: height ease 0.2s
+    display: flex
+    flex-direction: column
+    gap: 1vh
+    padding: 1vh 0
+    @include scrollbar

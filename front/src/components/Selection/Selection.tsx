@@ -37,7 +37,7 @@ class Selection extends React.Component<SelectionProps> {
                     return <Item key={index} quantity={item.quantity}
                                  id={item.id}
                                  name={this.getItem(item.id).name}
-                    />
+                                 price={this.getItem(item.id).price}/>
                 })}
             </div>
             <div className={styles.Footer}>

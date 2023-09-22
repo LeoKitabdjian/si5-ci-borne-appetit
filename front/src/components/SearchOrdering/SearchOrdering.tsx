@@ -7,25 +7,28 @@ interface SearchOrderingProps {
     items: BasicItem[];
 }
 
-interface SearchOrderingState {}
+interface SearchOrderingState {
+}
 
 class SearchOrdering extends React.Component<SearchOrderingProps, SearchOrderingState> {
 
     constructor(props: SearchOrderingProps) {
         super(props);
         this.state = {};
-        console.log(this.props.items)
     }
 
+    isEmpty = () => Object.entries(this.props.items).length === 0;
 
     render() {
-        return (
-            <div className={styles.SearchOrdering}>
-                {Object.entries(this.props.items).map(([id, item], index) => {
-                    return <Item addItemToOrder={this.props.addItemToOrder} name={item.name} price={item.price.toString()} id={id} img={item.image}/>
-                })}
-            </div>
-        );
+        return (<section
+            className={styles.SearchOrdering + " " + (this.isEmpty() ? styles.Empty : "")}>
+            {this.isEmpty() && "Pas de résultat"}
+            {Object.entries(this.props.items).map(([id, item], index) => <Item key={index}
+                                                                               addItemToOrder={this.props.addItemToOrder}
+                                                                               name={item.name}
+                                                                               price={item.price.toString()} id={id}
+                                                                               img={item.image}/>)}
+        </section>);
     }
 }
 

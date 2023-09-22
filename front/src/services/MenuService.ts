@@ -226,6 +226,11 @@ export const getItems = (): any => {
     return items;
 }
 
+export const findItems = (str: string): any => {
+    // in each items, find the str in the name
+    console.log(str);
+}
+
 export const getMenu = (): Menu => {
     let menu: Menu = [];
     let categories = new Set<string>();

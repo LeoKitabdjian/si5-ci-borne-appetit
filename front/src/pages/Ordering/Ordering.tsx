@@ -4,18 +4,20 @@ import {useNavigate} from "react-router-dom";
 
 import Button from "../../components/Button/Button";
 import {ButtonType} from "../../components/Button/ButtonType";
-import Category from "../../components/Category/Category";
-import ItemList from "../../components/ItemList/ItemList";
 import {getItems, getMenu} from "../../services/MenuService";
 import Selection from "../../components/Selection/Selection";
+import SearchBar from "../../components/SearchBar/SearchBar";
+import DefaultOrdering from "../../components/DefaultOrdering/DefaultOrdering";
+import SearchOrdering from "../../components/SearchOrdering/SearchOrdering";
 
 interface OrderingProps {
 }
 
 interface OrderingState {
-    activeCategory: string;
-    menu: Menu;
     order: OrderItem[];
+    menu: Menu;
+    items: Items;
+    search: string;
 }
 
 class Ordering extends React.Component<OrderingProps, OrderingState> {
@@ -23,8 +25,9 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
     constructor(props: OrderingProps) {
         super(props);
         let menu = getMenu();
+        let items = getItems();
         this.state = {
-            activeCategory: menu[0].id, menu: menu, order: []
+            order: [], menu: menu, items: items, search: ""
         }
     }
 
@@ -37,40 +40,18 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
         });
     }
 
-    setCurrentCategory = (key: string) => {
-        this.setState({
-            activeCategory: key
-        });
+    updateSearch = (search: string) => {
+        this.setState({search: search});
     }
 
-    isActive = (id: string) => this.state.activeCategory === id;
 
     render() {
         return <div className={styles.Ordering}>
             <main>
-                <section>
-                    <section className={styles.Categories}>
-                        {this.state.menu.map((category: any, index: number) => {
-                            return <Category id={category.id}
-                                             changeCategoryFunction={this.setCurrentCategory}
-                                             name={category.id}
-                                             isActive={this.isActive(category.id)}
-                                             key={index}/>
-                        })}
-                    </section>
-                </section>
-                <section>
-                    {this.state.menu.map((category: any, index: number) => {
-                        return <ItemList id={category.id}
-                                         items={category.items}
-                                         addItemToOrder={this.addItemToOrder}
-                                         isActive={this.isActive(category.id)}
-                                         name={category.id}
-                                         key={index}/>
-                    })}
-                </section>
-
-            <Selection items={getItems()} order={this.state.order}/>
+                <SearchBar updateSearch={this.updateSearch}/>
+                {this.state.search === "" && <DefaultOrdering menu={this.state.menu} addItemToOrder={this.addItemToOrder}/>}
+                {this.state.search !== "" && <SearchOrdering items={this.state.items} addItemToOrder={this.addItemToOrder}/>}
+                <Selection items={this.state.items} order={this.state.order}/>
             </main>
             <div className={styles.Actions}>
                 <GoBackButton/>

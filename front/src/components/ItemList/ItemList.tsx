@@ -21,21 +21,17 @@ class ItemList extends React.Component<ItemListProps, ItemListState> {
     }
 
 
-    render() {
-        return <div className={this.props.isActive ? "" : styles.hidden}>
-            <input type="text"/>
-                <div className={styles.ItemList}>
-                    {Object.entries(this.props.items).map(([id, item], index) =>
-                        <Item addItemToOrder={this.props.addItemToOrder}
-                              name={item.name}
-                              img={item.image}
-                              price={item.price}
-                              id={id}
-                              key={index}/>
-                    )}
-                </div>
-        </div>;
-    }
+    render = () => <div className={this.props.isActive ? "" : styles.hidden}>
+        <div className={styles.ItemList}>
+            {Object.entries(this.props.items).map(([id, item], index) => <Item
+                addItemToOrder={this.props.addItemToOrder}
+                name={item.name}
+                img={item.image}
+                price={item.price}
+                id={id}
+                key={index}/>)}
+        </div>
+    </div>;
 }
 
 export default ItemList;

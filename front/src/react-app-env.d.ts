@@ -21,6 +21,13 @@ type BasicItem = {
     image: string;
 }
 
+type CategorisedItem = {
+    name: string;
+    price: number;
+    image: string;
+    category: string;
+}
+
 type ItemList = {
     [key: string]: BasicItem;
 }

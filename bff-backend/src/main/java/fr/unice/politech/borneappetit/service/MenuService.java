@@ -1,7 +1,10 @@
 package fr.unice.politech.borneappetit.service;
 
 import fr.unice.politech.borneappetit.dto.MenuDto;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -10,6 +13,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
+    @Value("${gateway_url}")
+    String apiUrl;
+
+    public MenuDto[] getAll() {
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<MenuDto[]> responseEntity = restTemplate.getForEntity(apiUrl + "/menu/menus", MenuDto[].class);
+        return responseEntity.getBody();
+    }
+
     public List<MenuDto> sortMenus(MenuDto[] menus, String sortBy, String sortOrder) {
         Comparator<MenuDto> menuComparator = getComparator(sortBy);
 

@@ -5,11 +5,9 @@ import fr.unice.politech.borneappetit.service.MenuService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -30,11 +28,6 @@ public class MenuController {
             @Parameter(description = "Sort order (asc or desc)")
             @RequestParam(defaultValue = "asc") String sortOrder) {
 
-        String apiUrl = "http://localhost:9500/menu/menus";
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<MenuDto[]> responseEntity = restTemplate.getForEntity(apiUrl, MenuDto[].class);
-        MenuDto[] menus = responseEntity.getBody();
-
-        return menuService.sortMenus(menus, sortBy, sortOrder);
+        return menuService.sortMenus(menuService.getAll(), sortBy, sortOrder);
     }
 }

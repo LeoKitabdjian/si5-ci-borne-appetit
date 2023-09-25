@@ -1,10 +1,6 @@
 /// <reference types="react-scripts" />
 
 
-type OrderItem = {
-    id: string;
-    quantity: number;
-}
 
 type Items = {
     [key: string]: VeryBasicItem;
@@ -38,3 +34,4 @@ type Category = {
 }
 
 type Menu = Category[];
+

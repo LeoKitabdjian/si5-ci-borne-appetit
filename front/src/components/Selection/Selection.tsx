@@ -36,7 +36,7 @@ class Selection extends React.Component<SelectionProps> {
                     return <Item key={id} quantity={quantity}
                                  id={id}
                                  name={this.getItem(id).name}
-                                 price={this.getItem(id).price}
+                                 price={this.props.order.getPrice(id, this.props.items)}
                                  handleOrderAction={this.handleOrderAction}
                     />
                 })}

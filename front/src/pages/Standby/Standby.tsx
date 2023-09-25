@@ -3,15 +3,22 @@ import styles from './Standby.module.sass'
 import {useNavigate} from "react-router-dom";
 import Button from "../../components/Button/Button";
 import {ButtonType} from "../../components/Button/ButtonType";
+import {loadData} from "../../services/MenuService";
 
 interface StandbyProps {
 }
 
-
 const Standby: FC<StandbyProps> = () => {
     const navigate = useNavigate();
 
-    const gotoOrdering = () => navigate('/ordering');
+    const gotoOrdering = () => {
+
+        loadData().then(() => {
+                navigate('/ordering');
+            }
+        )
+
+    };
 
     return (<div onClick={gotoOrdering} className={styles.Standby}>
         <header></header>

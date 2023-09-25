@@ -10,11 +10,13 @@
   letter-spacing: 0.2vh
   border-radius: 1vh
   cursor: pointer
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2)
+  @include shadow
   display: flex
   align-items: center
   justify-content: center
   text-transform: uppercase
   opacity: 0.75
+  user-select: none
+
   &.active
     opacity: 1

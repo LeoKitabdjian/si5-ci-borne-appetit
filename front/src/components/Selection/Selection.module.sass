@@ -6,6 +6,7 @@
   display: grid
   grid-template-rows: auto 1fr auto
   height: 16vh
+  user-select: none
 
   &.IsOpen
     height: 83.8vh
@@ -13,6 +14,14 @@
     .Header
       .Collapser
         transform: rotate(90deg)
+
+  .Footer
+    font-size: 2vh
+    display: flex
+    padding: 1vh
+    justify-content: space-between
+    align-items: center
+    flex-direction: row
 
   .Header
     position: relative

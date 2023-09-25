@@ -42,8 +42,9 @@ class Selection extends React.Component<SelectionProps> {
                 })}
             </div>
             <div className={styles.Footer}>
-                Total
-                : {this.props.order.getTotalQuantity()} articles {this.props.order.getTotalPrice(this.props.items)} euros
+                <div>Total</div>
+                <div>{this.props.order.getTotalQuantity()} articles</div>
+                <div>{this.props.order.getTotalPrice(this.props.items)} euros</div>
             </div>
         </div>;
     }

@@ -9,12 +9,13 @@ import Selection from "../../components/Selection/Selection";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import DefaultOrdering from "../../components/DefaultOrdering/DefaultOrdering";
 import SearchOrdering from "../../components/SearchOrdering/SearchOrdering";
+import {Order} from "../../order";
 
 interface OrderingProps {
 }
 
 interface OrderingState {
-    order: OrderItem[];
+    order: Order;
     menu: Menu;
     items: Items;
     search: string;
@@ -28,17 +29,15 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
         let menu = getMenu();
         let items = getItems();
         this.state = {
-            order: [], menu: menu, items: items, search: "", selectionMinimized: true
+            order: new Order(), menu: menu, items: items, search: "", selectionMinimized: true
         }
     }
 
     addItemToOrder = (key: string) => {
-        let order = this.state.order;
-        let index = order.findIndex((item: OrderItem) => item.id === key);
-        if (index === -1) order.push({id: key, quantity: 1}); else order[index].quantity++;
+        this.state.order.addItem(key)
         this.setState({
-            order: order
-        });
+            order: this.state.order
+        })
     }
 
     updateSearch = (search: string) => {

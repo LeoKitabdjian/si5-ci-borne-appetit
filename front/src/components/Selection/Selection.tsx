@@ -1,10 +1,11 @@
 import React from 'react';
 import styles from './Selection.module.sass';
 import Item from "./Item/Item";
+import {Order} from "../../order";
 
 interface SelectionProps {
     handleSelection: () => void;
-    order: OrderItem[];
+    order: Order;
     items: Items;
     isOpen: boolean;
 }
@@ -18,9 +19,6 @@ class Selection extends React.Component<SelectionProps> {
 
     getItem = (id: string): VeryBasicItem => this.props.items[id];
 
-    getTotalItems = (): number => this.props.order.reduce((total, item) => total + item.quantity, 0);
-
-    getTotalPrice = (): number => this.props.order.reduce((total, item) => total + this.getItem(item.id).price * item.quantity, 0);
 
     collapseSelection = () => {
         this.props.handleSelection();
@@ -33,15 +31,15 @@ class Selection extends React.Component<SelectionProps> {
                 <span className={styles.Collapser}></span>
             </div>
             <div className={styles.Items}>
-                {this.props.order.map((item: OrderItem, index: number) => {
-                    return <Item key={index} quantity={item.quantity}
-                                 id={item.id}
-                                 name={this.getItem(item.id).name}
-                                 price={this.getItem(item.id).price}/>
+                {Object.entries(this.props.order.items).map(([id, quantity]) => {
+                    return <Item key={id} quantity={quantity}
+                                 id={id}
+                                 name={this.getItem(id).name}
+                                 price={this.getItem(id).price}/>
                 })}
             </div>
             <div className={styles.Footer}>
-                Total : {this.getTotalItems()} articles {this.getTotalPrice()} euros
+                Total : {this.props.order.getTotalQuantity()} articles {this.props.order.getTotalPrice(this.props.items)} euros
             </div>
         </div>;
     }

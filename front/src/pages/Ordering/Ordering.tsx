@@ -10,6 +10,7 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import DefaultOrdering from "../../components/DefaultOrdering/DefaultOrdering";
 import SearchOrdering from "../../components/SearchOrdering/SearchOrdering";
 import {Order} from "../../order";
+import {OrderAction} from "../../order.action";
 
 interface OrderingProps {
 }
@@ -33,16 +34,19 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
         }
     }
 
-    addItemToOrder = (key: string) => {
-        this.state.order.addItem(key)
+    updateOrder = (id: string, action: OrderAction) => {
+        if (action === OrderAction.ADD) this.state.order.addItem(id);
+        else if (action === OrderAction.DELETE) this.state.order.deleteItem(id);
+        else if (action === OrderAction.REMOVE) this.state.order.removeItem(id);
+        // update the state of the object to apply on children
         this.setState({
             order: this.state.order
         })
     }
 
-    updateSearch = (search: string) => {
-        this.setState({search: search});
-    }
+    addItemToOrder = (key: string) => this.updateOrder(key, OrderAction.ADD)
+
+    updateSearch = (search: string) => this.setState({search: search})
 
     getSearchedItems = (): BasicItem[] => findItems(this.state.search)
 
@@ -57,7 +61,7 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
                 {this.state.selectionMinimized && this.state.search !== "" &&
                     <SearchOrdering items={this.getSearchedItems()} addItemToOrder={this.addItemToOrder}/>}
                 <Selection isOpen={!this.state.selectionMinimized} handleSelection={this.handleSelection}
-                           items={this.state.items} order={this.state.order}/>
+                           items={this.state.items} order={this.state.order} handleOrderUpdate={this.updateOrder}/>
             </main>
             <div className={styles.Actions}>
                 <GoBackButton/>

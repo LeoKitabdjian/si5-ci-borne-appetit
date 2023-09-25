@@ -35,7 +35,3 @@ type Category = {
 
 type Menu = Category[];
 
-type OrderItem = {
-    [key: string]: number;
-}
-

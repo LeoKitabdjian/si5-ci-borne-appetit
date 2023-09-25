@@ -11,6 +11,7 @@ import DefaultOrdering from "../../components/DefaultOrdering/DefaultOrdering";
 import SearchOrdering from "../../components/SearchOrdering/SearchOrdering";
 import {Order} from "../../order";
 import {OrderAction} from "../../order.action";
+import {order} from "../../services/DiningService";
 
 interface OrderingProps {
 }
@@ -79,7 +80,13 @@ function GoBackButton() {
 
 function OrderButton() {
     const navigate = useNavigate();
-    const nav = () => navigate('/ordering');
+    const nav = () => {
+        order().then((tableNumber) => {
+            let params = {state: {tn:tableNumber}}
+            // @ts-ignore
+            navigate('/tableNumber', params);
+        })
+    };
     return (<Button type={ButtonType.Info} text={"Commander"} onClick={nav}/>);
 }
 

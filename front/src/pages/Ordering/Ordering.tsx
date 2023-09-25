@@ -11,6 +11,7 @@ import DefaultOrdering from "../../components/DefaultOrdering/DefaultOrdering";
 import SearchOrdering from "../../components/SearchOrdering/SearchOrdering";
 import {Order} from "../../order";
 import {OrderAction} from "../../order.action";
+import {useTranslation} from "react-i18next";
 
 interface OrderingProps {
 }
@@ -72,15 +73,17 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
 }
 
 function GoBackButton() {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const nav = () => navigate('/');
-    return (<Button type={ButtonType.Danger} text={"Annuler"} onClick={nav}/>);
+    return (<Button type={ButtonType.Danger} text={t('action.cancel')} onClick={nav}/>);
 }
 
 function OrderButton() {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const nav = () => navigate('/ordering');
-    return (<Button type={ButtonType.Info} text={"Commander"} onClick={nav}/>);
+    return (<Button type={ButtonType.Info} text={t('action.order')} onClick={nav}/>);
 }
 
 export default Ordering;

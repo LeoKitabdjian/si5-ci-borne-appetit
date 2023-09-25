@@ -3,8 +3,10 @@ import styles from './Selection.module.sass';
 import Item from "./Item/Item";
 import {Order} from "../../order";
 import {OrderAction} from "../../order.action";
+import {withTranslation} from "react-i18next";
 
 interface SelectionProps {
+    t: any;
     handleSelection: () => void;
     order: Order;
     items: Items;
@@ -26,9 +28,10 @@ class Selection extends React.Component<SelectionProps> {
     handleOrderAction = (id: string, action: OrderAction) => this.props.handleOrderUpdate(id, action)
 
     render() {
+        const { t } = this.props;
         return <div className={styles.Selection + " " + (this.props.isOpen ? styles.IsOpen : "")}>
             <div onClick={this.collapseSelection} className={styles.Header}>
-                <h1>Votre commande</h1>
+                <h1>{t('selection.order')}</h1>
                 <span className={styles.Collapser}></span>
             </div>
             <div className={styles.Items}>
@@ -42,12 +45,12 @@ class Selection extends React.Component<SelectionProps> {
                 })}
             </div>
             <div className={styles.Footer}>
-                <div>Total</div>
-                <div>{this.props.order.getTotalQuantity()} articles</div>
-                <div>{this.props.order.getTotalPrice(this.props.items)} euros</div>
+                <div>{t('selection.total')}</div>
+                <div>{t('selection.item',  {count: this.props.order.getTotalQuantity()})}</div>
+                <div>{t('selection.price', {count: this.props.order.getTotalPrice(this.props.items)})}</div>
             </div>
         </div>;
     }
 }
 
-export default Selection;
+export default withTranslation()(Selection);

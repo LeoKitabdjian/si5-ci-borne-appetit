@@ -3,5 +3,19 @@
     "title": "Bienvenue sur <0>Borne'Appétit</0>",
     "subtitle": "La solution numéro 1 pour gérer vos services de commande via des bornes !",
     "button": "Appuyer n'importe où sur l'écran pour commander"
+  },
+  "selection": {
+    "order": "Votre commande",
+    "total": "Total",
+    "item_zero": "{{count}} article",
+    "item_one": "{{count}} article",
+    "item_other": "{{count}} articles",
+    "price_zero": "{{count}} euro",
+    "price_one": "{{count}} euro",
+    "price_other": "{{count}} euros"
+  },
+  "action": {
+    "cancel": "Annuler",
+    "order": "Commander"
   }
 }

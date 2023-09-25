@@ -45,7 +45,7 @@ public class MenuController {
     @GetMapping("byCategory")
     @Operation(summary = "Get the list of the menus grouped by category")
     public ResponseEntity<List<CategoryMenuDto>> getMenusByCategory() {
-        List<MenuDto> menus = List.of(menuService.getAll());
+        List<MenuDto> menus = menuService.sortMenus(menuService.getAll(), "fullName", "asc");
 
         Map<String, List<MenuDto>> menusByCategory = menus.stream()
                 .collect(Collectors.groupingBy(MenuDto::getCategory));

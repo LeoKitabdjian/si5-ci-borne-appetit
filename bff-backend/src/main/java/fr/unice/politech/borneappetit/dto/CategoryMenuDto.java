@@ -3,11 +3,11 @@ package fr.unice.politech.borneappetit.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Map;
 
 @Data
 @AllArgsConstructor
 public class CategoryMenuDto {
-    private String id;
-    private List<ItemDto> items;
+    private String name;
+    private Map<String, ItemDto> items;
 }

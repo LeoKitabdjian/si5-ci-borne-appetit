@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -21,6 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin
 @Tag(name = "Menu controller", description = "Operations related to menus")
 @RequestMapping("/menus")
 public class MenuController {
@@ -52,12 +50,15 @@ public class MenuController {
 
         List<CategoryMenuDto> categoryMenus = new ArrayList<>();
         menusByCategory.forEach((category, menuList) -> {
-            List<ItemDto> items = menuList.stream()
+            Map<String, ItemDto> itemsMap = menuList.stream()
                     .map(ItemDto::fromMenuDto)
                     .sorted(Comparator.comparing(ItemDto::getName))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toMap(
+                            ItemDto::getId,   // Clé : id de l'ItemDto
+                            itemDto -> itemDto // Valeur : ItemDto lui-même
+                    ));
 
-            categoryMenus.add(new CategoryMenuDto(category, items));
+            categoryMenus.add(new CategoryMenuDto(category, itemsMap));
         });
 
         return ResponseEntity.status(HttpStatus.OK).body(categoryMenus);

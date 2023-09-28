@@ -64,6 +64,7 @@ function findBookableTable(tables: any) {
 }
 
 function addItemsToTableOrder(order: Order, result: Array<any>) {
+    let count = 0;
     for (const item of Object.entries(order.items)) {
         console.log(item[0]);
         console.log(item[1]);
@@ -78,6 +79,16 @@ function addItemsToTableOrder(order: Order, result: Array<any>) {
                 'Content-Type': 'application/json'
             },
             body: postBody
+        }).then(() => {
+            count++;
+            if (count === Object.entries(order.items).length) {
+                fetch("http://localhost:9500/dining/tableOrders/" + result[1] + "/prepare", {
+                    method: "POST",
+                    body: postBody
+                }).then(() => {
+                    console.log("Items sent to kitchen");
+                })
+            }
         })
     }
 }

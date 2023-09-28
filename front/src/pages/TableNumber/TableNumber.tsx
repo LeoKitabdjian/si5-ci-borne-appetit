@@ -16,7 +16,7 @@ const TableNumber: FC<TableNumberProps> = () => {
     }, TIME_UNTIL_RETURN * 1000);
 
     return (<div className={styles.TableNumber}>
-        Votre numéro de table est : {location.state.tn}
+        {location.state.message}
     </div>)
 };
 

@@ -77,8 +77,12 @@ function OrderButton({order}) {
     const navigate = useNavigate();
     useState("order")
     const nav = (order: Order) => {
+        let params;
         sendOrder(order).then((tableNumber: number) => {
-            let params = {state: {tn:tableNumber}}
+            params = {state: {message: "Votre numéro de table est le " + tableNumber}};
+            navigate('/tableNumber', params);
+        }).catch((error) => {
+            params = {state: {message: error}};
             navigate('/tableNumber', params);
         })
     };

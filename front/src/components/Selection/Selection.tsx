@@ -4,6 +4,7 @@ import Item from "./Item/Item";
 import {Order} from "../../order";
 import {OrderAction} from "../../order.action";
 import {withTranslation} from "react-i18next";
+import {CustomerAction} from "../../customer.action";
 
 interface SelectionProps {
     t: any;
@@ -12,6 +13,7 @@ interface SelectionProps {
     items: Items;
     isOpen: boolean;
     handleOrderUpdate: (id: string, action: OrderAction) => void;
+    handleCustomerUpdate: (action: CustomerAction) => void;
 }
 
 class Selection extends React.Component<SelectionProps> {
@@ -28,7 +30,7 @@ class Selection extends React.Component<SelectionProps> {
     handleOrderAction = (id: string, action: OrderAction) => this.props.handleOrderUpdate(id, action)
 
     render() {
-        const { t } = this.props;
+        const {t} = this.props;
         return <div className={styles.Selection + " " + (this.props.isOpen ? styles.IsOpen : "")}>
             <div onClick={this.collapseSelection} className={styles.Header}>
                 <h1>{t('selection.order')}</h1>
@@ -46,9 +48,18 @@ class Selection extends React.Component<SelectionProps> {
             </div>
             <div className={styles.Footer}>
                 <div>{t('selection.total')}</div>
-                <div>{t('selection.item',  {count: this.props.order.getTotalQuantity()})}</div>
+                <div>{t('selection.item', {count: this.props.order.getTotalQuantity()})}</div>
                 <div>{t('selection.price', {count: this.props.order.getTotalPrice(this.props.items)})}</div>
             </div>
+            {this.props.isOpen && <div className={styles.Customers}>
+                <div className={styles.Action} onClick={() => this.props.handleCustomerUpdate(CustomerAction.REMOVE)}>
+                    <img src="/images/minus.svg" alt=""/>
+                </div>
+                <div className={styles.Counter}>{t('selection.customer', {count: this.props.order.customers})}</div>
+                <div className={styles.Action} onClick={() => this.props.handleCustomerUpdate(CustomerAction.ADD)}>
+                    <img src="/images/add.svg" alt=""/>
+                </div>
+            </div>}
         </div>;
     }
 }

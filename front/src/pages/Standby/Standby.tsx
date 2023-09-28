@@ -1,33 +1,28 @@
-import React, {FC} from 'react';
+import React from 'react';
 import styles from './Standby.module.sass'
 import {useNavigate} from "react-router-dom";
 import Button from "../../components/Button/Button";
 import {ButtonType} from "../../components/Button/ButtonType";
-import {loadData} from "../../services/MenuService";
+import {Trans, useTranslation, withTranslation} from "react-i18next";
 
-interface StandbyProps {
-}
 
-const Standby: FC<StandbyProps> = () => {
+const Standby = () => {
+    const {t} = useTranslation();
+    console.log(t)
     const navigate = useNavigate();
 
-    const gotoOrdering = () => {
-
-        loadData().then(() => {
-                navigate('/ordering');
-            }
-        )
-
-    };
+    const gotoOrdering = () => navigate('/ordering');
 
     return (<div onClick={gotoOrdering} className={styles.Standby}>
         <header></header>
         <main>
             <div className={styles.title}>
-                <h1>Bienvenue chez <span>Borne'Appétit</span></h1>
-                <h2>La solution numéro 1 pour gérer vos services de commande via des bornes !</h2>
+                <h1>
+                    <Trans i18nKey="standby.title" components={[<span />]} />
+                </h1>
+                <h2>{t('standby.subtitle')}</h2>
             </div>
-            <Button text={"Appuyer n'importe où sur l'écran pour commander"} type={ButtonType.Primary} isFull={true}/>
+            <Button text={t('standby.button')} type={ButtonType.Primary} isFull={true}/>
         </main>
     </div>);
 };

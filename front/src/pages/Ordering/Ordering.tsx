@@ -11,6 +11,8 @@ import DefaultOrdering from "../../components/DefaultOrdering/DefaultOrdering";
 import SearchOrdering from "../../components/SearchOrdering/SearchOrdering";
 import {Order} from "../../order";
 import {OrderAction} from "../../order.action";
+import {useTranslation} from "react-i18next";
+import {CustomerAction} from "../../customer.action";
 import {sendOrder} from "../../services/DiningService";
 
 interface OrderingProps {
@@ -36,10 +38,16 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
     }
 
     updateOrder = (id: string, action: OrderAction) => {
-        if (action === OrderAction.ADD) this.state.order.addItem(id);
-        else if (action === OrderAction.DELETE) this.state.order.deleteItem(id);
-        else if (action === OrderAction.REMOVE) this.state.order.removeItem(id);
+        if (action === OrderAction.ADD) this.state.order.addItem(id); else if (action === OrderAction.DELETE) this.state.order.deleteItem(id); else if (action === OrderAction.REMOVE) this.state.order.removeItem(id);
         // update the state of the object to apply on children
+        this.setState({
+            order: this.state.order
+        })
+    }
+
+    updateCustomer = (action: CustomerAction) => {
+        if (action === CustomerAction.ADD) this.state.order.addCustomer();
+        else if (action === CustomerAction.REMOVE) this.state.order.removeCustomer();
         this.setState({
             order: this.state.order
         })
@@ -62,7 +70,8 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
                 {this.state.selectionMinimized && this.state.search !== "" &&
                     <SearchOrdering items={this.getSearchedItems()} addItemToOrder={this.addItemToOrder}/>}
                 <Selection isOpen={!this.state.selectionMinimized} handleSelection={this.handleSelection}
-                           items={this.state.items} order={this.state.order} handleOrderUpdate={this.updateOrder}/>
+                           items={this.state.items} order={this.state.order} handleOrderUpdate={this.updateOrder}
+                           handleCustomerUpdate={this.updateCustomer}/>
             </main>
             <div className={styles.Actions}>
                 <GoBackButton/>
@@ -72,8 +81,16 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
     }
 }
 
+function GoBackButton() {
+    const {t} = useTranslation();
+    const navigate = useNavigate();
+    const nav = () => navigate('/');
+    return (<Button type={ButtonType.Danger} text={t('action.cancel')} onClick={nav}/>);
+}
+
 // @ts-ignore
 function OrderButton({order}) {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     useState("order")
     const nav = (order: Order) => {
@@ -86,13 +103,7 @@ function OrderButton({order}) {
             navigate('/tableNumber', params);
         })
     };
-    return (<Button type={ButtonType.Info} text={"Commander"} onClick={() => nav(order)}/>);
-}
-
-function GoBackButton() {
-    const navigate = useNavigate();
-    const nav = () => navigate('/');
-    return (<Button type={ButtonType.Danger} text={"Annuler"} onClick={nav}/>);
+    return (<Button type={ButtonType.Info} text={t("action.order")} onClick={() => nav(order)}/>);
 }
 
 export default Ordering;

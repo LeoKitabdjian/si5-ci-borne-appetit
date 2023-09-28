@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styles from './Ordering.module.sass';
 import {useNavigate} from "react-router-dom";
 
@@ -13,6 +13,7 @@ import {Order} from "../../order";
 import {OrderAction} from "../../order.action";
 import {useTranslation} from "react-i18next";
 import {CustomerAction} from "../../customer.action";
+import {sendOrder} from "../../services/DiningService";
 
 interface OrderingProps {
 }
@@ -74,7 +75,7 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
             </main>
             <div className={styles.Actions}>
                 <GoBackButton/>
-                <OrderButton/>
+                <OrderButton order={this.state.order}/>
             </div>
         </div>;
     }
@@ -87,11 +88,22 @@ function GoBackButton() {
     return (<Button type={ButtonType.Danger} text={t('action.cancel')} onClick={nav}/>);
 }
 
-function OrderButton() {
+// @ts-ignore
+function OrderButton({order}) {
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const nav = () => navigate('/ordering');
-    return (<Button type={ButtonType.Info} text={t('action.order')} onClick={nav}/>);
+    useState("order")
+    const nav = (order: Order) => {
+        let params;
+        sendOrder(order).then((tableNumber: number) => {
+            params = {state: {message: "Votre numéro de table est le " + tableNumber}};
+            navigate('/tableNumber', params);
+        }).catch((error) => {
+            params = {state: {message: error}};
+            navigate('/tableNumber', params);
+        })
+    };
+    return (<Button type={ButtonType.Info} text={t("action.order")} onClick={() => nav(order)}/>);
 }
 
 export default Ordering;

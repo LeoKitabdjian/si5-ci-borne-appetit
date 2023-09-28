@@ -1,8 +1,20 @@
 export class Order {
-    items: { [key: string]: number };
+    items: { [key: string]: number }
+    customers: number
 
     constructor() {
         this.items = {};
+        this.customers = 1;
+    }
+
+    removeCustomer() {
+        if (this.customers > 1) {
+            this.customers -= 1;
+        }
+    }
+
+    addCustomer() {
+        this.customers += 1;
     }
 
     addItem(id: string) {

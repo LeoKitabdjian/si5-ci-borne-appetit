@@ -12,7 +12,9 @@
     "item_other": "{{count}} articles",
     "price_zero": "{{count}} euro",
     "price_one": "{{count}} euro",
-    "price_other": "{{count}} euros"
+    "price_other": "{{count}} euros",
+    "customer_one": "{{count}} personne",
+    "customer_other": "{{count}} personnes"
   },
   "action": {
     "cancel": "Annuler",

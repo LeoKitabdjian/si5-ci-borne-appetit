@@ -3,21 +3,15 @@ import styles from './Standby.module.sass'
 import {useNavigate} from "react-router-dom";
 import Button from "../../components/Button/Button";
 import {ButtonType} from "../../components/Button/ButtonType";
-import {loadData} from "../../services/MenuService";
 import {Trans, useTranslation, withTranslation} from "react-i18next";
 
 
 const Standby = () => {
+    const {t} = useTranslation();
+    console.log(t)
     const navigate = useNavigate();
 
-    const gotoOrdering = () => {
-
-        loadData().then(() => {
-                navigate('/ordering');
-            }
-        )
-
-    };
+    const gotoOrdering = () => navigate('/ordering');
 
     return (<div onClick={gotoOrdering} className={styles.Standby}>
         <header></header>

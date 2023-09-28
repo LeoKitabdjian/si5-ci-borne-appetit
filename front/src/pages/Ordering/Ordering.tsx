@@ -98,7 +98,7 @@ function OrderButton({order}) {
         sendOrder(order).then((tableNumber: number) => {
             params = {state: {message: "Votre numéro de table est le " + tableNumber}};
             navigate('/tableNumber', params);
-        }).catch((error) => {
+        }).catch((error: string) => {
             params = {state: {message: error}};
             navigate('/tableNumber', params);
         })

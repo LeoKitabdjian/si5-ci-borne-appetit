@@ -3,8 +3,7 @@ import {getItems} from "./MenuService";
 
 export function sendOrder(order: Order) {
     return new Promise<number>((resolve, reject) => {
-        console.log(order);
-        bookTable().then((result) => {
+        bookTable(order.customers).then((result) => {
             console.log(result);
             resolve(result[0]);
             addItemsToTableOrder(order, result);
@@ -15,14 +14,14 @@ export function sendOrder(order: Order) {
     })
 }
 
-function bookTable() {
+function bookTable(customerCount: number) {
     return new Promise<Array<any>>((resolve, reject) => {
         fetch("http://localhost:9500/dining/tables")
             .then((response) => response.json())
             .then((json) => {
                 let tables = json;
                 console.log(tables)
-                findBookableTable(tables).then((result) => {
+                findBookableTable(tables, customerCount).then((result) => {
                     resolve(result)
                 }).catch((error) => {
                     reject(error)
@@ -31,7 +30,7 @@ function bookTable() {
     })
 }
 
-function findBookableTable(tables: any) {
+function findBookableTable(tables: any, customerCount: number) {
     return new Promise<Array<any>>((resolve, reject) => {
         let tableNumber = -1
         for (const table of tables) {
@@ -39,8 +38,7 @@ function findBookableTable(tables: any) {
                 tableNumber = table.number
                 let postBody = {
                     "tableNumber": tableNumber,
-                    // TODO customersCount !!
-                    "customersCount": 1
+                    "customersCount": customerCount
                 };
                 fetch("http://localhost:9500/dining/tableOrders", {
                     method: "POST",

@@ -1,9 +1,8 @@
 export function loadData() {
     return new Promise<boolean>((resolve)=> {
-        fetch("http://localhost:9500/menu/menus")
+        fetch("http://localhost:8080/menus")
             .then((response) => response.json())
             .then((json) => {
-                console.log(json)
                 localStorage.setItem("menu", JSON.stringify(json))
                 resolve(true)
             });
@@ -14,9 +13,9 @@ export const getItems = (): any => {
     let items = {};
     // @ts-ignore
     let json = JSON.parse(localStorage.getItem("menu"))
-    json.forEach((item: { _id: string | number; fullName: any; shortName: any; price: any; category: any; image: any; }) => {
+    json.forEach((item: { id: string | number; fullName: any; shortName: any; price: any; category: any; image: any; }) => {
         // @ts-ignore
-        items[item._id] = {
+        items[item.id] = {
             name: item.fullName,
             shortName: item.shortName,
             price: item.price,
@@ -49,9 +48,9 @@ export const getMenu = (): Menu => {
     })
     categories.forEach(category => {
         let items: ItemList = {};
-        json.forEach((item: { category: string; _id: string | number; fullName: any; price: any; image: any; }) => {
+        json.forEach((item: { category: string; id: string | number; fullName: any; price: any; image: any; }) => {
             if (item.category === category) {
-                items[item._id] = {
+                items[item.id] = {
                     name: item.fullName,
                     price: item.price,
                     image: item.image,

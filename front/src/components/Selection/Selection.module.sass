@@ -6,6 +6,7 @@
   display: grid
   grid-template-rows: auto 1fr auto
   height: 16vh
+  user-select: none
 
   &.IsOpen
     height: 83.8vh
@@ -13,6 +14,14 @@
     .Header
       .Collapser
         transform: rotate(90deg)
+
+  .Footer
+    font-size: 2vh
+    display: flex
+    padding: 1vh
+    justify-content: space-between
+    align-items: center
+    flex-direction: row
 
   .Header
     position: relative
@@ -42,3 +51,31 @@
     gap: 1vh
     padding: 1vh 0
     @include scrollbar
+
+  .Customers
+    display: flex
+    flex-direction: row
+    gap: 1vh
+    padding-top: 1vh
+    align-items: center
+    justify-content: space-between
+    background: $background
+
+    .Counter
+      width: 100%
+      font-size: 2.5vh
+
+    .Action
+      width: auto
+      background: $main
+      aspect-ratio: 1/1
+      border-radius: 100vh
+      cursor: pointer
+      display: flex
+      padding: 2vh
+
+      img
+        width: 2vh
+        filter: invert(1)
+        aspect-ratio: 1/1
+        -webkit-user-drag: none

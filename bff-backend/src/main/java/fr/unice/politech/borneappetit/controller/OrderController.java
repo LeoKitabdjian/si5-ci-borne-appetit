@@ -1,19 +1,23 @@
 package fr.unice.politech.borneappetit.controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import fr.unice.politech.borneappetit.dto.OrderDto;
+import fr.unice.politech.borneappetit.service.OrderService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("orders")
+@RequestMapping("/orders")
 public class OrderController {
+    private final OrderService orderService;
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
+
     @PostMapping
-    public void makeOrder() {
-        // todo: find available table (return error if not)
-        // todo: make the table as taken
-        // todo: link the orders items with the table
-        // todo: make order as payed
-        // todo: send the items to be cooked
-        // todo: return the command id and the table id
+    @CrossOrigin
+    public List makeOrder(@RequestBody OrderDto orderDto) throws Exception {
+        return orderService.create(orderDto);
     }
 }

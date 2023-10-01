@@ -29,6 +29,14 @@ public class MenuController {
     }
 
     @GetMapping
+    @Operation(summary = "Get a list of menus")
+    public ResponseEntity<List<MenuDto>> getMenus() {
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(List.of(menuService.getAll()));
+    }
+
+    @GetMapping("/sorted")
     @Operation(summary = "Get a list of menus sorted by specified criteria.")
     public ResponseEntity<List<MenuDto>> getSortedMenus(
             @Parameter(description = "Sort by field (id, fullName, shortName, price, category, image)")
@@ -40,8 +48,8 @@ public class MenuController {
                 .body(menuService.sortMenus(menuService.getAll(), sortBy, sortOrder));
     }
 
-    @GetMapping("byCategory")
-    @Operation(summary = "Get the list of the menus grouped by category")
+    // @GetMapping("byCategory")
+    // @Operation(summary = "Get the list of the menus grouped by category")
     public ResponseEntity<List<CategoryMenuDto>> getMenusByCategory() {
         List<MenuDto> menus = menuService.sortMenus(menuService.getAll(), "fullName", "asc");
 

@@ -57,7 +57,7 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
 
     updateSearch = (search: string) => this.setState({search: search})
 
-    getSearchedItems = (): BasicItem[] => findItems(this.state.search)
+    getSearchedItems = (): Items => findItems(this.state.search)
 
     handleSelection = () => this.setState({selectionMinimized: !this.state.selectionMinimized})
 

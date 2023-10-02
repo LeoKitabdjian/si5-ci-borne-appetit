@@ -4,7 +4,7 @@ import Item from "../Item/Item";
 
 interface SearchOrderingProps {
     addItemToOrder: (key: string) => void;
-    items: BasicItem[];
+    items: Items;
 }
 
 interface SearchOrderingState {

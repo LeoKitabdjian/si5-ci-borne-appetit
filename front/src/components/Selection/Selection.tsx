@@ -23,7 +23,7 @@ class Selection extends React.Component<SelectionProps> {
         console.log(this.props)
     }
 
-    getItem = (id: string): VeryBasicItem => this.props.items[id];
+    getItem = (id: string): Item => this.props.items[id];
 
     collapseSelection = () => this.props.handleSelection()
 

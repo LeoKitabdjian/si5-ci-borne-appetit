@@ -1,20 +1,34 @@
 export function loadData() {
-    return new Promise<boolean>((resolve)=> {
+    return new Promise<boolean>((resolve) => {
         fetch("http://localhost:9500/menu/menus")
             .then((response) => response.json())
             .then((json) => {
                 console.log(json)
-                localStorage.setItem("menu", JSON.stringify(json))
+                const menu = parseMenu(json);
+                localStorage.setItem("menu", JSON.stringify(menu))
+                const items = parseItems(json);
+                localStorage.setItem("items", JSON.stringify(items))
                 resolve(true)
             });
     })
 }
 
-export const getItems = (): any => {
+export const getItems = (): Items => {
+    let items = localStorage.getItem("items")
+    return items ? JSON.parse(items) : {};
+}
+
+export const getMenu = (): Menu => {
+    let menu = localStorage.getItem("menu")
+    return menu ? JSON.parse(menu) : {};
+}
+
+
+const parseItems = (json: any): Items => {
     let items = {};
-    // @ts-ignore
-    let json = JSON.parse(localStorage.getItem("menu"))
-    json.forEach((item: { _id: string | number; fullName: any; shortName: any; price: any; category: any; image: any; }) => {
+    json.forEach((item: {
+        _id: string | number; fullName: any; shortName: any; price: any; category: any; image: any;
+    }) => {
         // @ts-ignore
         items[item._id] = {
             name: item.fullName,
@@ -27,56 +41,44 @@ export const getItems = (): any => {
     return items;
 }
 
-export const findItems = (str: string): any => {
-    let items = getItems();
-    let foundItems = {};
+export const findItems = (str: string): Items => {
+    const items: Items = getItems();
+    const foundItems: Items = {};
+
     Object.keys(items).forEach(key => {
         if (items[key].name.toLowerCase().includes(str.toLowerCase())) {
-            // @ts-ignore
             foundItems[key] = items[key];
         }
-    })
-    return foundItems;
-}
+    });
 
-export const getMenu = (): Menu => {
+    return foundItems;
+};
+
+const parseMenu = (json: any): Menu => {
     let menu: Menu = [];
     let categories = new Set<string>();
-    // @ts-ignore
-    let json = JSON.parse(localStorage.getItem("menu"))
     json.forEach((item: { category: string; }) => {
         categories.add(item.category);
     })
     categories.forEach(category => {
-        let items: ItemList = {};
+        let items: CategoryItems = {};
         json.forEach((item: { category: string; _id: string | number; fullName: any; price: any; image: any; }) => {
             if (item.category === category) {
                 items[item._id] = {
-                    name: item.fullName,
-                    price: item.price,
-                    image: item.image,
+                    name: item.fullName, price: item.price, image: item.image
                 };
             }
         })
         menu.push({
-            id: category,
-            items: items,
+            id: category, items: items,
         })
     })
     menu.forEach(category => {
-        const itemsArray = Object.entries(category.items).map(([key, item]) => ({ key, item }));
+        const sortedItemsArray = Object.entries(category.items)
+            .sort(([, itemA], [, itemB]) => itemA.name.localeCompare(itemB.name));
 
-        itemsArray.sort((a, b) => {
-            if (a.item.name < b.item.name) return -1;
-            if (a.item.name > b.item.name) return 1;
-            return 0;
-        });
-
-        let sortedItems: { [key: string]: any } = {};
-        itemsArray.forEach(({ key, item }) => {
-            sortedItems[key] = item;
-        });
-        category.items = sortedItems;
+        category.items = Object.fromEntries(sortedItemsArray);
     });
+
     return menu;
 }

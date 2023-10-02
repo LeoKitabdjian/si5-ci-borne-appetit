@@ -3,7 +3,6 @@ export function loadData() {
         fetch("http://localhost:8080/menus")
             .then((response) => response.json())
             .then((json) => {
-                localStorage.setItem("menu", JSON.stringify(json.menu))
                 localStorage.setItem("items", JSON.stringify(json.items))
                 localStorage.setItem("categoryMenu", JSON.stringify(json.categoryMenu))
                 resolve(true)

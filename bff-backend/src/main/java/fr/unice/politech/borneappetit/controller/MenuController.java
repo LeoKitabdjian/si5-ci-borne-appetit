@@ -30,7 +30,6 @@ public class MenuController {
     public ResponseEntity<Map<String, Object>> getMenus() {
         List<MenuDto> menus = List.of(menuService.getAll());
         Map<String, Object> response = new HashMap<>();
-        response.put("menu", menus);
         response.put("items", Arrays.stream(this.menuService.getAll())
                 .collect(Collectors.toMap(MenuDto::getId, ItemDto::fromMenuDto)));
 
@@ -68,29 +67,5 @@ public class MenuController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(menuService.sortMenus(menuService.getAll(), sortBy, sortOrder));
-    }
-
-    // @GetMapping("byCategory")
-    // @Operation(summary = "Get the list of the menus grouped by category")
-    public ResponseEntity<List<CategoryMenuDto>> getMenusByCategory() {
-        List<MenuDto> menus = menuService.sortMenus(menuService.getAll(), "fullName", "asc");
-
-        Map<String, List<MenuDto>> menusByCategory = menus.stream()
-                .collect(Collectors.groupingBy(MenuDto::getCategory));
-
-        List<CategoryMenuDto> categoryMenus = new ArrayList<>();
-        menusByCategory.forEach((category, menuList) -> {
-            Map<String, ItemDto> itemsMap = menuList.stream()
-                    .map(ItemDto::fromMenuDto)
-                    .sorted(Comparator.comparing(ItemDto::getName))
-                    .collect(Collectors.toMap(
-                            ItemDto::getId,   // Clé : id de l'ItemDto
-                            itemDto -> itemDto // Valeur : ItemDto lui-même
-                    ));
-
-            categoryMenus.add(new CategoryMenuDto(category, itemsMap));
-        });
-
-        return ResponseEntity.status(HttpStatus.OK).body(categoryMenus);
     }
 }

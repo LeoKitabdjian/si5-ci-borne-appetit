@@ -1,4 +1,4 @@
-require('dotenv').config()
+import env from "react-dotenv";
 
 export function loadData() {
     return new Promise<boolean>((resolve)=> {

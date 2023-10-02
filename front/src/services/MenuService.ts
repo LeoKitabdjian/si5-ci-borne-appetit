@@ -4,13 +4,9 @@ import {findItemsFromServices, getItemsFromServices, getMenuFromServices, loadDa
 const isBff = process.env.REACT_APP_IS_BFF === 'true' ?? false;
 
 export function loadData() {
-    console.log(isBff)
-    console.log(typeof isBff)
     if (isBff) {
-        console.log("is bff")
         return loadDataFromBff()
     } else {
-        console.log("is not bff")
         return loadDataFromServices()
     }
 }

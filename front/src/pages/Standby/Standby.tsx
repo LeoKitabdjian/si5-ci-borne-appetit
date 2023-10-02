@@ -5,7 +5,6 @@ import Button from "../../components/Button/Button";
 import {ButtonType} from "../../components/Button/ButtonType";
 import {Trans, useTranslation} from "react-i18next";
 import {loadData} from "../../services/MenuService";
-import env from "react-dotenv";
 
 const Standby = () => {
     const {t} = useTranslation();

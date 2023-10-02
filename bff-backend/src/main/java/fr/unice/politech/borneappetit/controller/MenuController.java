@@ -11,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,10 +27,35 @@ public class MenuController {
 
     @GetMapping
     @Operation(summary = "Get a list of menus")
-    public ResponseEntity<List<MenuDto>> getMenus() {
+    public ResponseEntity<Map<String, Object>> getMenus() {
+        List<MenuDto> menus = List.of(menuService.getAll());
+        Map<String, Object> response = new HashMap<>();
+        response.put("menu", menus);
+        response.put("items", Arrays.stream(this.menuService.getAll())
+                .collect(Collectors.toMap(MenuDto::getId, ItemDto::fromMenuDto)));
+
+        Map<String, List<MenuDto>> menusByCategory = menus.stream().collect(Collectors.groupingBy(MenuDto::getCategory));
+
+        List<CategoryMenuDto> categoryMenus = new ArrayList<>();
+        List<String> categories = List.of("STARTER", "MAIN", "BEVERAGE", "DESSERT");
+
+        categories.forEach((category) -> {
+            Map<String, ItemDto> itemsMap = menus.stream()
+                    .filter(menu -> category.equals(menu.getCategory()))
+                    .map(ItemDto::fromMenuDto)
+                    .sorted(Comparator.comparing(ItemDto::getName))
+                    .collect(Collectors.toMap(
+                            ItemDto::getId,
+                            itemDto -> itemDto
+                    ));
+
+            categoryMenus.add(new CategoryMenuDto(category, itemsMap));
+        });
+
+        response.put("categoryMenu", categoryMenus);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(List.of(menuService.getAll()));
+                .body(response);
     }
 
     @GetMapping("/sorted")

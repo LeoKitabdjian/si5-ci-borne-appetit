@@ -11,7 +11,7 @@ const TableNumber = () => {
     const location = useLocation();
     const {t} = useTranslation();
 
-    setTimeout(() => {
+    const redirect = setTimeout(() => {
         navigate("/");
     }, TIME_UNTIL_RETURN * 1000);
 
@@ -28,9 +28,7 @@ const TableNumber = () => {
             {location.state.error && <div className={styles.TableNumber}>
                 <h2>{t('table.error')}</h2>
             </div>}
-
         </section>
-        <Button text={t('action.continue')} type={ButtonType.Info} isFull={true} onClick={() => navigate("/")}/>
     </div>
 };
 

@@ -48,19 +48,15 @@ export class Order {
         return Number(total.toFixed(2));
     }
 
-    getTotalQuantity() {
-        let total = 0;
-        for (const id in this.items) {
-            total += this.items[id];
-        }
-        return total;
+    size() {
+        return Object.values(this.items).reduce((total, currentValue) => total + currentValue, 0);
     }
 
     getTotalPrice(items: Items) {
-        let total = 0;
-        for (const id in this.items) {
-            total += this.items[id] * items[id].price;
-        }
+        const total = Object.keys(this.items).reduce((sum, id) => {
+            return sum + (this.items[id] * (items[id]?.price || 0));
+        }, 0);
+
         return Number(total.toFixed(2));
     }
 

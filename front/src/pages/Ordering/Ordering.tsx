@@ -96,10 +96,10 @@ function OrderButton({order}) {
     const nav = (order: Order) => {
         let params;
         sendOrder(order).then((tableNumber: number) => {
-            params = {state: {message: "Votre numéro de table est le " + tableNumber}};
+            params = {state: {tableNumber: tableNumber}};
             navigate('/tableNumber', params);
         }).catch((error: string) => {
-            params = {state: {message: error}};
+            params = {state: {error: error}};
             navigate('/tableNumber', params);
         })
     };

@@ -1,2 +1,27 @@
-.TableNumber
-  background-color: red
+@import "public/variables"
+
+.Content
+  padding: 4vh
+  height: 100vh
+  display: flex
+  justify-content: space-between
+  flex-direction: column
+
+  .TableNumber
+    display: flex
+    gap: 2vh
+    flex-direction: column
+    user-select: none
+    flex: 1
+    justify-content: center
+
+    h1
+      font-size: 5vh
+
+      span
+        font-weight: bold
+        color: $main
+
+    h2
+        font-size: 3vh
+        font-weight: 300

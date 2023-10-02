@@ -1,37 +1,33 @@
 /// <reference types="react-scripts" />
-
-
-
-type Items = {
-    [key: string]: VeryBasicItem;
-}
-
-type VeryBasicItem = {
-    name: string;
-    price: number;
-}
-
-type BasicItem = {
-    name: string;
-    price: number;
-    image: string;
-}
-
-type CategorisedItem = {
-    name: string;
-    price: number;
-    image: string;
-    category: string;
-}
-
-type ItemList = {
-    [key: string]: BasicItem;
-}
+type Menu = Category[];
 
 type Category = {
     id: string;
-    items: ItemList;
+    items: CategoryItems;
 }
 
-type Menu = Category[];
+type CategoryItems = {
+    [key: string]: ItemInCategory;
+}
+
+type ItemInCategory = {
+    name: string;
+    price: number;
+    image: number;
+}
+
+type Items = {
+    [key: string]: Item;
+}
+
+type Item = {
+    name: string;
+    price: number;
+    image: string;
+    shortName: string;
+    category: string;
+}
+
+
+
 

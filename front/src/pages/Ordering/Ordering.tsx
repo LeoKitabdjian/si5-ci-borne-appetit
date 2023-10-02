@@ -46,8 +46,7 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
     }
 
     updateCustomer = (action: CustomerAction) => {
-        if (action === CustomerAction.ADD) this.state.order.addCustomer();
-        else if (action === CustomerAction.REMOVE) this.state.order.removeCustomer();
+        if (action === CustomerAction.ADD) this.state.order.addCustomer(); else if (action === CustomerAction.REMOVE) this.state.order.removeCustomer();
         this.setState({
             order: this.state.order
         })
@@ -57,7 +56,7 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
 
     updateSearch = (search: string) => this.setState({search: search})
 
-    getSearchedItems = (): BasicItem[] => findItems(this.state.search)
+    getSearchedItems = (): Items => findItems(this.state.search)
 
     handleSelection = () => this.setState({selectionMinimized: !this.state.selectionMinimized})
 
@@ -75,7 +74,7 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
             </main>
             <div className={styles.Actions}>
                 <GoBackButton/>
-                <OrderButton order={this.state.order}/>
+                <OrderButton order={this.state.order} selectionMinimized={this.state.selectionMinimized} handleSelection={this.handleSelection}/>
             </div>
         </div>;
     }
@@ -89,21 +88,30 @@ function GoBackButton() {
 }
 
 // @ts-ignore
-function OrderButton({order}) {
+function OrderButton({order, selectionMinimized, handleSelection}) {
     const {t} = useTranslation();
     const navigate = useNavigate();
     useState("order")
+    useState("selectionMinimized")
+    let orderObject: Order = order;
     const nav = (order: Order) => {
-        let params;
-        sendOrder(order).then((tableNumber: number) => {
-            params = {state: {message: "Votre numéro de table est le " + tableNumber}};
-            navigate('/tableNumber', params);
-        }).catch((error: string) => {
-            params = {state: {message: error}};
-            navigate('/tableNumber', params);
-        })
+        if (order.size() > 0) {
+            if (selectionMinimized) {
+                handleSelection();
+            } else {
+                let params;
+                sendOrder(order).then((tableNumber: number) => {
+                    params = {state: {tableNumber: tableNumber}};
+                    navigate('/tableNumber', params);
+                }).catch((error: string) => {
+                    params = {state: {error: error}};
+                    navigate('/tableNumber', params);
+                })
+            }
+        }
     };
-    return (<Button type={ButtonType.Info} text={t("action.order")} onClick={() => nav(order)}/>);
+    return (<Button type={ButtonType.Info} text={t("action.order")} isDisabled={orderObject.size() === 0}
+                    onClick={() => nav(order)}/>);
 }
 
 export default Ordering;

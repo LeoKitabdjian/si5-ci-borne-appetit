@@ -23,7 +23,7 @@ class Selection extends React.Component<SelectionProps> {
         console.log(this.props)
     }
 
-    getItem = (id: string): VeryBasicItem => this.props.items[id];
+    getItem = (id: string): Item => this.props.items[id];
 
     collapseSelection = () => this.props.handleSelection()
 
@@ -48,7 +48,7 @@ class Selection extends React.Component<SelectionProps> {
             </div>
             <div className={styles.Footer}>
                 <div>{t('selection.total')}</div>
-                <div>{t('selection.item', {count: this.props.order.getTotalQuantity()})}</div>
+                <div>{t('selection.item', {count: this.props.order.size()})}</div>
                 <div>{t('selection.price', {count: this.props.order.getTotalPrice(this.props.items)})}</div>
             </div>
             {this.props.isOpen && <div className={styles.Customers}>

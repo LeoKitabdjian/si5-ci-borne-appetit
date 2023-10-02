@@ -7,9 +7,11 @@ interface ButtonProps {
     type: ButtonType;
     onClick?: () => void;
     isFull?: boolean;
+    isDisabled?: boolean;
 }
 
-interface ButtonState {}
+interface ButtonState {
+}
 
 class Button extends React.Component<ButtonProps, ButtonState> {
 
@@ -20,11 +22,11 @@ class Button extends React.Component<ButtonProps, ButtonState> {
 
 
     render() {
-        return (
-            <div className={styles.Button + ' ' + styles[this.props.type] + ' ' + (this.props.isFull === true ? styles.Full : '')} onClick={this.props.onClick}>
-                {this.props.text}
-            </div>
-        );
+        return (<div
+            className={styles.Button + ' ' + styles[this.props.type] + ' ' + (this.props.isFull === true ? styles.Full : '') + ' ' + (this.props.isDisabled === true ? styles.Disabled : '')}
+            onClick={this.props.onClick}>
+            {this.props.text}
+        </div>);
     }
 }
 

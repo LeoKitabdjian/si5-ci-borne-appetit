@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 export function loadData() {
     return new Promise<boolean>((resolve)=> {
         fetch("http://localhost:8080/menus")

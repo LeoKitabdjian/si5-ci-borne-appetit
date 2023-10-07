@@ -6,6 +6,9 @@ export function loadDataFromBff() {
                 localStorage.setItem("items", JSON.stringify(json.items))
                 localStorage.setItem("categoryMenu", JSON.stringify(json.categoryMenu))
                 resolve(true)
+            })
+            .catch(() => {
+                resolve(false)
             });
     })
 }

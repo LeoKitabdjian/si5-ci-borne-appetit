@@ -10,7 +10,14 @@ const Standby = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
 
-    const gotoOrdering = () => loadData().then(() => navigate('/ordering'));
+    const gotoOrdering = () => loadData()
+        .then((response) => {
+            if (!response) {
+                navigate('/error');
+            } else {
+                navigate('/ordering');
+            }
+        });
 
     return (<div onClick={gotoOrdering} className={styles.Standby}>
         <header></header>

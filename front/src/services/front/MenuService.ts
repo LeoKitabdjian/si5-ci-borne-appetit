@@ -8,7 +8,7 @@ export function loadDataFromServices() {
             for (const table of json) {
                 if (!table.taken) {
                     tableAvailable = true;
-                    console.log("Sending GET request to retrieve menu");
+                    console.log("Found available table, sending GET request to retrieve menu");
                     fetch("http://localhost:9500/menu/menus")
                         .then((response) => response.json())
                         .then((json) => {

@@ -1,8 +1,10 @@
 export function loadDataFromBff() {
     return new Promise<boolean>((resolve)=> {
+        console.log("Envoi de la requête de récupération des items et menus au bff")
         fetch("http://localhost:8080/menus")
             .then((response) => response.json())
             .then((json) => {
+                console.log("Réception des menus. Sauvegarde des données en local pour utilisation future")
                 localStorage.setItem("items", JSON.stringify(json.items))
                 localStorage.setItem("categoryMenu", JSON.stringify(json.categoryMenu))
                 resolve(true)

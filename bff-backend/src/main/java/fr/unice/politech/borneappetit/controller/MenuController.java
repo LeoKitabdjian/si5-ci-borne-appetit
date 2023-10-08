@@ -31,7 +31,9 @@ public class MenuController {
     @GetMapping
     @Operation(summary = "Get a list of menus")
     public ResponseEntity getMenus() {
+        System.out.println("Reception de la demande du menu et items");
         if (tableService.findAvailableTable().isPresent()) {
+            System.out.println("Table disponible >= 1. Demande du menu au microservice via le gateway");
             List<MenuDto> menus = List.of(menuService.getAll());
             Map<String, Object> response = new HashMap<>();
             response.put("items", Arrays.stream(this.menuService.getAll())
@@ -56,10 +58,11 @@ public class MenuController {
             });
 
             response.put("categoryMenu", categoryMenus);
-
+            System.out.println("Envoi de la réponse (le menu et les items)");
             return ResponseEntity.status(HttpStatus.OK)
                     .body(response);
         } else {
+            System.out.println("Aucune table trouvée. Envoi d'une erreur en réponse");
             return ResponseEntity.status(HttpStatus.MULTI_STATUS).build();
         }
     }

@@ -18,6 +18,7 @@ public class OrderController {
     @PostMapping
     @CrossOrigin
     public List makeOrder(@RequestBody OrderDto orderDto) throws Exception {
+        System.out.println("Réception de la commande");
         return orderService.create(orderDto);
     }
 }

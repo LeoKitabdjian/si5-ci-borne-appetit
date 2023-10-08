@@ -2,6 +2,7 @@ import {Order} from "../../order";
 
 export function sendOrderToBff(order: Order) {
     return new Promise<number>((resolve, reject) => {
+        console.log("Envoi de la commande au bff")
         fetch("http://localhost:8080/orders", {
             method: "POST",
             headers: {

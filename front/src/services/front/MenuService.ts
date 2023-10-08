@@ -1,15 +1,30 @@
+import {tab} from "@testing-library/user-event/dist/tab";
+
 export function loadDataFromServices() {
     return new Promise<boolean>((resolve) => {
-        fetch("http://localhost:9500/menu/menus")
-            .then((response) => response.json())
-            .then((json) => {
-                console.log(json)
-                const menu = parseMenu(json);
-                localStorage.setItem("menu", JSON.stringify(menu))
-                const items = parseItems(json);
-                localStorage.setItem("items", JSON.stringify(items))
-                resolve(true)
-            });
+        fetch("http://localhost:9500/dining/tables").then((response) => response.json()).then((json) => {
+            let tableAvailable = false;
+            for (const table of json) {
+                console.log(table.taken);
+                if (!table.taken) {
+                    tableAvailable = true;
+                    fetch("http://localhost:9500/menu/menus")
+                        .then((response) => response.json())
+                        .then((json) => {
+                            console.log(json)
+                            const menu = parseMenu(json);
+                            localStorage.setItem("menu", JSON.stringify(menu))
+                            const items = parseItems(json);
+                            localStorage.setItem("items", JSON.stringify(items))
+                            resolve(true)
+                        });
+                    break;
+                }
+            }
+            if (!tableAvailable) {
+                resolve(false);
+            }
+        })
     })
 }
 

@@ -13,8 +13,10 @@ const Standby = () => {
     const gotoOrdering = () => loadData()
         .then((response) => {
             if (!response) {
+                console.log("Aucune table de disponible");
                 navigate('/error');
             } else {
+                console.log("Au moins une table est disponible, affichage du menu...");
                 navigate('/ordering');
             }
         });

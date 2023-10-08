@@ -4,7 +4,6 @@ import {getItems} from "../MenuService";
 export function sendOrderToServices(order: Order) {
     return new Promise<number>((resolve, reject) => {
         bookTable(order.customers).then((result) => {
-            console.log(result);
             resolve(result[0]);
             addItemsToTableOrder(order, result);
         }).catch((error) => {
@@ -16,12 +15,11 @@ export function sendOrderToServices(order: Order) {
 
 function bookTable(customerCount: number) {
     return new Promise<Array<any>>((resolve, reject) => {
+        console.log("Sending GET request to get tables");
         fetch("http://localhost:9500/dining/tables")
             .then((response) => response.json())
             .then((json) => {
-                let tables = json;
-                console.log(tables)
-                findBookableTable(tables, customerCount).then((result) => {
+                findBookableTable(json, customerCount).then((result) => {
                     resolve(result)
                 }).catch((error) => {
                     reject(error)
@@ -40,6 +38,7 @@ function findBookableTable(tables: any, customerCount: number) {
                     "tableNumber": tableNumber,
                     "customersCount": customerCount
                 };
+                console.log("Found free table, sending POST request to book table " + tableNumber);
                 fetch("http://localhost:9500/dining/tableOrders", {
                     method: "POST",
                     headers: {
@@ -49,28 +48,30 @@ function findBookableTable(tables: any, customerCount: number) {
                 }).then(r => {
                     r.json().then((json) => {
                         let toReturn = [json.tableNumber, json._id]
-                        console.log(toReturn);
+                        console.log("Table numéro " + toReturn[0] + ", order ID : " + toReturn[1]);
                         resolve(toReturn);
                     });
                 })
                 break;
             }
         }
-        if (tableNumber === -1)
+        if (tableNumber === -1) {
+            console.log("No table found");
             reject("Aucune table disponible");
+        }
     });
 }
 
 function addItemsToTableOrder(order: Order, result: Array<any>) {
     let count = 0;
     for (const item of Object.entries(order.items)) {
-        console.log(item[0]);
-        console.log(item[1]);
+        let shortName = getItems()[item[0]].shortName;
         let postBody = JSON.stringify({
             "menuItemId": item[0],
-            "menuItemShortName": getItems()[item[0]].shortName,
+            "menuItemShortName": shortName,
             "howMany": item[1]
         })
+        console.log("Adding item " + shortName + " * " + item[1] + " to table via POST request");
         fetch("http://localhost:9500/dining/tableOrders/" + result[1], {
             method: "POST",
             headers: {
@@ -80,6 +81,7 @@ function addItemsToTableOrder(order: Order, result: Array<any>) {
         }).then(() => {
             count++;
             if (count === Object.entries(order.items).length) {
+                console.log("All items sent, sending POST request to start item preparations");
                 fetch("http://localhost:9500/dining/tableOrders/" + result[1] + "/prepare", {
                     method: "POST",
                     body: postBody

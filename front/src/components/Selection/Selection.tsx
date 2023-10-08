@@ -20,7 +20,6 @@ class Selection extends React.Component<SelectionProps> {
 
     constructor(props: SelectionProps) {
         super(props);
-        console.log(this.props)
     }
 
     getItem = (id: string): Item => this.props.items[id];

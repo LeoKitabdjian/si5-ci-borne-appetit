@@ -2,19 +2,22 @@ import {tab} from "@testing-library/user-event/dist/tab";
 
 export function loadDataFromServices() {
     return new Promise<boolean>((resolve) => {
+        console.log("Sending GET request to check if any table is available");
         fetch("http://localhost:9500/dining/tables").then((response) => response.json()).then((json) => {
             let tableAvailable = false;
             for (const table of json) {
-                console.log(table.taken);
                 if (!table.taken) {
                     tableAvailable = true;
+                    console.log("Sending GET request to retrieve menu");
                     fetch("http://localhost:9500/menu/menus")
                         .then((response) => response.json())
                         .then((json) => {
-                            console.log(json)
+                            console.log("Menu récupéré depuis le front", json)
                             const menu = parseMenu(json);
+                            console.log("Menu parsé", menu)
                             localStorage.setItem("menu", JSON.stringify(menu))
                             const items = parseItems(json);
+                            console.log("Items parsés", items)
                             localStorage.setItem("items", JSON.stringify(items))
                             resolve(true)
                         });

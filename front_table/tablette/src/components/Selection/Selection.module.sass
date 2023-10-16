@@ -1,0 +1,54 @@
+@import "/public/variables"
+
+.Selection
+  background-color: white
+  border-radius: 1vh
+  display: grid
+  grid-template-rows: auto 1fr auto
+  height: 16vh
+  user-select: none
+  grid-area: selections
+
+  &.IsOpen
+    height: 83.5vh
+
+    .Header
+      .Collapser
+        transform: rotate(90deg)
+
+  .Footer
+    font-size: 2vh
+    display: flex
+    padding: 1vh
+    justify-content: space-between
+    align-items: center
+    flex-direction: row
+
+  .Header
+    position: relative
+    cursor: pointer
+
+    h1
+      background: transparent
+      padding: 1vh
+      margin-bottom: 0
+
+    .Collapser
+      background: transparent
+      position: absolute
+      right: 0
+      top: 0
+      bottom: 0
+      aspect-ratio: 1/1
+      background: url("/images/arrow.svg") no-repeat center center
+      transform: rotate(-90deg)
+
+  .Items
+    overflow-y: auto
+    background: $background
+    transition: height ease 0.2s
+    display: flex
+    flex-direction: column
+    gap: 1vh
+    padding: 1vh 0
+    @include scrollbar

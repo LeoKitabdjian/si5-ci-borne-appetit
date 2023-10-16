@@ -1,0 +1,42 @@
+@import "/public/variables"
+
+$default-size: 100%
+$number-of-columns: 5
+$gap: 2vh
+$w: calc($default-size / $number-of-columns - $gap)
+
+.Item
+  cursor: pointer
+  align-self: end
+  user-select: none
+  width: $w
+  flex: 0 0 $w
+  box-sizing: border-box
+
+  .Title
+    font-size: 1.75vh
+    margin-bottom: 0.25vh
+    font-weight: 500
+    text-transform: uppercase
+    color: $background-color
+
+  .Image
+    position: relative
+
+    img
+      aspect-ratio: 5/5
+      border-radius: 1vh
+      width: 100%
+      object-fit: cover
+      -webkit-user-drag: none
+      @include shadow
+
+    .Price
+      font-size: 2vh
+      position: absolute
+      background: $main
+      color: $main-color
+      bottom: 1vh
+      right: 1vh
+      padding: 0.5vh 0.75vh
+      border-radius: 0.5vh

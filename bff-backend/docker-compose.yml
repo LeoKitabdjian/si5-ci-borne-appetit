@@ -7,10 +7,10 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - GATEWAY_URL=http://gateway:8080
+      - GATEWAY_URL=http://gateway:9500
     networks:
-      - restaurant_spring-restaurant-network
+      - restaurant-nestjs_nestjs-restaurant-network
 
 networks:
-  restaurant_spring-restaurant-network:
+  restaurant-nestjs_nestjs-restaurant-network:
       external: true

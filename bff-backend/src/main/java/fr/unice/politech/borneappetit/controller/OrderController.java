@@ -22,15 +22,15 @@ public class OrderController {
         return orderService.create(orderDto);
     }
 
-    @GetMapping("/:id")
+    @PostMapping("/{tableId}")
     @CrossOrigin
-    public void storeTableOrder(@RequestBody OrderDto orderDto,@RequestBody String tableId) throws Exception {
+    public void storeTableOrder(@RequestBody OrderDto orderDto,@PathVariable String tableId) throws Exception {
         System.out.println("Ajout de la commande");
         orderService.storeOrder(orderDto,tableId);
     }
-    @GetMapping("/send/:id")
+    @PostMapping("/send/{tableId}")
     @CrossOrigin
-    public List sendTableOrder(@RequestBody String tableId) throws Exception {
+    public List sendTableOrder(@PathVariable String tableId) throws Exception {
         System.out.println("Envoi de la commande");
         return orderService.createTableOrder(tableId);
     }

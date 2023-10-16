@@ -30,8 +30,8 @@ public class OrderController {
     }
     @GetMapping("/send/:id")
     @CrossOrigin
-    public void sendTableOrder(@RequestBody String tableId) throws Exception {
+    public List sendTableOrder(@RequestBody String tableId) throws Exception {
         System.out.println("Envoi de la commande");
-        orderService.createTableOrder(tableId);
+        return orderService.createTableOrder(tableId);
     }
 }

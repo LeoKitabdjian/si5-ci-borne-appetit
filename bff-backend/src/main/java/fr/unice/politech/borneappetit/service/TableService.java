@@ -36,6 +36,12 @@ public class TableService {
         return Optional.empty();
     }
 
+    public Table findByID(String id) {
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<Table> responseEntity = restTemplate.getForEntity(apiUrl + "/dining/tables/" + id, Table.class);
+        return responseEntity.getBody();
+    }
+
     public TableOrder makeReservation(Integer tableNumber, Integer customersCount) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

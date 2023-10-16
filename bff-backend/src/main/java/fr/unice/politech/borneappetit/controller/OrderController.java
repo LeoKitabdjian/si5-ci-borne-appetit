@@ -21,4 +21,17 @@ public class OrderController {
         System.out.println("Réception de la commande");
         return orderService.create(orderDto);
     }
+
+    @GetMapping("/:id")
+    @CrossOrigin
+    public void storeTableOrder(@RequestBody OrderDto orderDto,@RequestBody String tableId) throws Exception {
+        System.out.println("Ajout de la commande");
+        orderService.storeOrder(orderDto,tableId);
+    }
+    @GetMapping("/send/:id")
+    @CrossOrigin
+    public void sendTableOrder(@RequestBody String tableId) throws Exception {
+        System.out.println("Envoi de la commande");
+        orderService.createTableOrder(tableId);
+    }
 }

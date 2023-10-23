@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Standby.module.sass'
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import Button from "../../components/Button/Button";
 import {ButtonType} from "../../components/Button/ButtonType";
 import {Trans, useTranslation} from "react-i18next";
@@ -9,6 +9,13 @@ import {loadData} from "../../services/MenuService";
 const Standby = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
+
+    const currentLocation = useLocation();
+
+    const queryParams = new URLSearchParams(currentLocation.search);
+    const tableId = queryParams.get('tableId');
+
+    if (!tableId) navigate('/error')
 
     const gotoOrdering = () => loadData()
         .then((response) => {

@@ -24,6 +24,6 @@
   "table": {
     "title": "Votre numéro de table est le <0>{{number}}</0>",
     "subtitle": "Nous allons vous apporter votre commande dès que possible !",
-    "error": "Il n'y a pas de table disponible pour le moment, veuillez réessayer plus tard."
+    "error": "Identifiant de table manquant sur votre tablette."
   }
 }

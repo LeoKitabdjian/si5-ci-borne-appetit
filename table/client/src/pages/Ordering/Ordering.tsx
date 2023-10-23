@@ -102,10 +102,9 @@ function OrderButton({order, selectionMinimized, handleSelection}) {
                 handleSelection();
             } else {
                 let params;
-                sendOrder(order).then((tableNumber: number) => {
+                sendOrder(order).then(() => {
                     // Pas nécessaire du coup ?
-                    params = {state: {tableNumber: tableNumber}};
-                    navigate('/game?' + urlParams, params);
+                    navigate('/game?' + urlParams);
                 }).catch((error: string) => {
                     params = {state: {error: t('error.order')}};
                     navigate('/error?' + urlParams, params);

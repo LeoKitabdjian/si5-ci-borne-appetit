@@ -18,6 +18,9 @@ services:
     restart: on-failure
     ports:
       - '5432:5432'
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_USER=postgres
     volumes:
       - orders_database:/data/db
     networks:

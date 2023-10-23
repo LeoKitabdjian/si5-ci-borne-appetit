@@ -10,6 +10,21 @@ services:
       - GATEWAY_URL=http://gateway:9500
     networks:
       - restaurant-nestjs_nestjs-restaurant-network
+    depends_on:
+      - orders_database
+
+  orders_database:
+    image: mongo:4.4.18
+    restart: on-failure
+    ports:
+      - '27017:27017'
+    volumes:
+      - orders_database:/data/db
+    networks:
+      - restaurant-nestjs_nestjs-restaurant-network
+
+volumes:
+  orders_database:
 
 networks:
   restaurant-nestjs_nestjs-restaurant-network:

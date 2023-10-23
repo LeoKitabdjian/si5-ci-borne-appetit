@@ -103,11 +103,12 @@ function OrderButton({order, selectionMinimized, handleSelection}) {
             } else {
                 let params;
                 sendOrder(order).then((tableNumber: number) => {
+                    // Pas nécessaire du coup ?
                     params = {state: {tableNumber: tableNumber}};
-                    navigate('/tableNumber?' + urlParams, params);
+                    navigate('/game?' + urlParams, params);
                 }).catch((error: string) => {
-                    params = {state: {error: error}};
-                    navigate('/tableNumber?' + urlParams, params);
+                    params = {state: {error: t('error.order')}};
+                    navigate('/error?' + urlParams, params);
                 })
             }
         }

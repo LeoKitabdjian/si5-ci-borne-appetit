@@ -25,5 +25,13 @@
     "title": "Votre numéro de table est le <0>{{number}}</0>",
     "subtitle": "Nous allons vous apporter votre commande dès que possible !",
     "error": "Identifiant de table manquant sur votre tablette."
+  },
+  "game": {
+    "welcome": "Ceci est un jeu"
+  },
+  "error": {
+    "order": "Erreur lors de votre commande",
+    "tableId": "Votre tablette n'est pas associée à une table",
+    "noTable": "Aucune table de disponible"
   }
 }

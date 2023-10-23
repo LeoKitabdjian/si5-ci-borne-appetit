@@ -3,8 +3,8 @@ import styles from "./App.module.sass";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Standby from "../pages/Standby/Standby";
 import Ordering from "../pages/Ordering/Ordering";
-import TableNumber from "../pages/TableNumber/TableNumber";
 import Error from "../pages/Error/Error";
+import Game from "../pages/Game/Game";
 
 const App = () => {
     return (<div className={styles.App}>
@@ -12,8 +12,8 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<Standby/>}/>
                 <Route path="/ordering" element={<Ordering/>}/>
-                <Route path="/tableNumber" element={<TableNumber/>}/>
                 <Route path="/error" element={<Error/>}/>
+                <Route path="/game" element={<Game/>}/>
                 <Route path='*' element={<Navigate to='/'/>}/>
             </Routes>
         </BrowserRouter>

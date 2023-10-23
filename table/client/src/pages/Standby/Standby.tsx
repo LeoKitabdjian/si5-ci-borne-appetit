@@ -17,14 +17,13 @@ const Standby = () => {
     const tableId = queryParams.get('tableId');
 
     localStorage.setItem("urlParams", urlParams);
-
-    if (!tableId) navigate('/error?' + urlParams)
+    if (!tableId) navigate('/error?' + urlParams, {state: {error: t('error.tableId')}})
 
     const gotoOrdering = () => loadData()
         .then((response) => {
             if (!response) {
                 console.log("Aucune table de disponible");
-                navigate('/error?' + urlParams);
+                navigate('/error?' + urlParams, {state: {error: t('error.noTable')}});
             } else {
                 console.log("Au moins une table est disponible, affichage du menu...");
                 navigate('/ordering?' + urlParams);

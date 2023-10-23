@@ -1,10 +1,11 @@
 package fr.unice.politech.borneappetit.repository;
 
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import fr.unice.politech.borneappetit.model.TableOrder;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import fr.unice.politech.borneappetit.model.TableOrderPostgre;
 
-@RepositoryRestResource(exported = false)
-public interface OrderRepository extends MongoRepository<TableOrder, String> {
+@Repository
+public interface OrderRepository extends JpaRepository<TableOrderPostgre, Long> {
 }
+
 

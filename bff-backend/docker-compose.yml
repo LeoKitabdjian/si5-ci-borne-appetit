@@ -14,10 +14,10 @@ services:
       - orders_database
 
   orders_database:
-    image: mongo:4.4.18
+    image: postgres:latest
     restart: on-failure
     ports:
-      - '27017:27017'
+      - '5432:5432'
     volumes:
       - orders_database:/data/db
     networks:

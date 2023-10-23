@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Standby.module.sass'
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import Button from "../../components/Button/Button";
 import {ButtonType} from "../../components/Button/ButtonType";
 import {Trans, useTranslation} from "react-i18next";
@@ -9,22 +9,25 @@ import {loadData} from "../../services/MenuService";
 const Standby = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
+    const urlParams = useSearchParams()[0].toString();
 
     const currentLocation = useLocation();
 
     const queryParams = new URLSearchParams(currentLocation.search);
     const tableId = queryParams.get('tableId');
 
-    if (!tableId) navigate('/error')
+    localStorage.setItem("urlParams", urlParams);
+
+    if (!tableId) navigate('/error?' + urlParams)
 
     const gotoOrdering = () => loadData()
         .then((response) => {
             if (!response) {
                 console.log("Aucune table de disponible");
-                navigate('/error');
+                navigate('/error?' + urlParams);
             } else {
                 console.log("Au moins une table est disponible, affichage du menu...");
-                navigate('/ordering');
+                navigate('/ordering?' + urlParams);
             }
         });
 

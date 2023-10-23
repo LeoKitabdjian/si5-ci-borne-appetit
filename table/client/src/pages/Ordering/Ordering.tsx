@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styles from './Ordering.module.sass';
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 
 import Button from "../../components/Button/Button";
 import {ButtonType} from "../../components/Button/ButtonType";
@@ -83,7 +83,8 @@ class Ordering extends React.Component<OrderingProps, OrderingState> {
 function GoBackButton() {
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const nav = () => navigate('/');
+    const urlParams = useSearchParams()[0].toString();
+    const nav = () => navigate('/?' + urlParams);
     return (<Button type={ButtonType.Danger} text={t('action.cancel')} onClick={nav}/>);
 }
 
@@ -91,6 +92,7 @@ function GoBackButton() {
 function OrderButton({order, selectionMinimized, handleSelection}) {
     const {t} = useTranslation();
     const navigate = useNavigate();
+    const urlParams = useSearchParams()[0].toString();
     useState("order")
     useState("selectionMinimized")
     let orderObject: Order = order;
@@ -102,10 +104,10 @@ function OrderButton({order, selectionMinimized, handleSelection}) {
                 let params;
                 sendOrder(order).then((tableNumber: number) => {
                     params = {state: {tableNumber: tableNumber}};
-                    navigate('/tableNumber', params);
+                    navigate('/tableNumber?' + urlParams, params);
                 }).catch((error: string) => {
                     params = {state: {error: error}};
-                    navigate('/tableNumber', params);
+                    navigate('/tableNumber?' + urlParams, params);
                 })
             }
         }

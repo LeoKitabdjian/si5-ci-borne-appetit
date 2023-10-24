@@ -1,0 +1,24 @@
+@import "/public/variables"
+
+$height: 58.5vh
+
+.DefaultOrdering
+  display: flex
+  flex-direction: row
+  gap: 2vh
+  grid-area: products
+  height: $height
+
+  .Categories
+    width: 15%
+    height: $height
+    display: flex
+    flex-direction: column
+    justify-content: space-around
+    gap: 1vh
+
+  .Items
+    width: 85%
+    height: $height
+    overflow-y: auto
+    @include scrollbar

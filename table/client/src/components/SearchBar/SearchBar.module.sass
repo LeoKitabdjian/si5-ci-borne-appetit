@@ -1,0 +1,29 @@
+@import "public/variables"
+
+.SearchBar
+  width: 100%
+  display: flex
+  background: white
+  border-radius: 1vh
+  grid-area: search
+  align-items: center
+  @include shadow
+
+  input
+    width: 100%
+    border: none
+    outline: none
+    font-size: 1.75vh
+    padding: 1vh 0 1vh 1vh
+    background: transparent
+
+  img
+    height: 3vh
+    aspect-ratio: 1/1
+    padding: 1vh
+    box-sizing: content-box
+    user-select: none
+    -webkit-user-drag: none
+
+.Keyboard
+  display: none

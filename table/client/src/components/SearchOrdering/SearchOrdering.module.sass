@@ -1,0 +1,21 @@
+@import "/public/variables"
+
+.SearchOrdering
+  display: flex
+  gap: 2vh
+  height: 58.8vh
+  overflow-y: auto
+  flex-wrap: wrap
+  align-content: flex-start
+  @include scrollbar
+
+  &.Empty
+    justify-content: center
+    align-items: center
+    align-content: center
+    text-transform: uppercase
+    font-size: 3vh
+    user-select: none
+    color: darken($background, 25%)
+    font-weight: 400
+    text-align: center

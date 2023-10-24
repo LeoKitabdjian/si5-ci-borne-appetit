@@ -1,0 +1,23 @@
+@import "public/variables"
+
+.Category
+  background-color: $main
+  color: $main-color
+  width: 100%
+  aspect-ratio: 10/6
+  font-size: 1.75vh
+  font-weight: 600
+  letter-spacing: 0.2vh
+  border-radius: 1vh
+  cursor: pointer
+  @include shadow
+  display: flex
+  align-items: center
+  justify-content: center
+  text-transform: uppercase
+  opacity: 0.75
+  user-select: none
+  transition: all ease 0.25s
+
+  &.active
+    opacity: 1

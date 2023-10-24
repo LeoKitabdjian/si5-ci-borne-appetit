@@ -1,0 +1,49 @@
+.Item
+  border: 0.1vh solid black
+  border-radius: 1vh
+  background: white
+  display: flex
+  padding: 0.75vh 1vh
+  align-items: center
+  gap: 1vh
+  font-size: 1.75vh
+  user-select: none
+
+  .Name
+    flex: 1
+    text-align: left
+    overflow: hidden
+    white-space: nowrap
+
+  .Price
+    font-weight: bold
+
+  .Actions
+    display: flex
+    gap: 1vh
+
+    .Quantity
+      display: flex
+      gap: 0.75vh
+      align-items: center
+
+
+    .RoundButton
+      width: 2.5vh
+      aspect-ratio: 1/1
+      font-size: 2vh
+      border-radius: 2vh
+      display: inline-flex
+      align-items: center
+      justify-content: center
+      background: #b2b2b2
+
+      &.DeleteButton
+        background: red
+
+        img
+          filter: invert(1)
+
+      img
+        height: 1.5vh
+        aspect-ratio: 1/1

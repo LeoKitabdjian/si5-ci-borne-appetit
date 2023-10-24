@@ -8,9 +8,30 @@ services:
       - "8080:8080"
     environment:
       - GATEWAY_URL=http://gateway:3000
+      - DB_USER=root
+      - DB_PASSWORD=helloworld!
+      - DB_NAME=orders_database
+      - DB_PORT=5432
+      - DB_HOST=orders_database
     networks:
       - restaurant-nestjs_nestjs-restaurant-network
+      - bff-network
+    depends_on:
+      - orders_database
+
+  orders_database:
+    image: postgres:latest
+    restart: always
+    ports:
+      - "40404:5432"
+    environment:
+      - POSTGRES_PASSWORD=helloworld!
+      - POSTGRES_USER=root
+      - POSTGRES_DB=orders_database
+    networks:
+      - bff-network
 
 networks:
   restaurant-nestjs_nestjs-restaurant-network:
       external: true
+  bff-network:

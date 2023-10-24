@@ -4,7 +4,6 @@ import fr.unice.politech.borneappetit.dto.MenuDto;
 import fr.unice.politech.borneappetit.dto.OrderDto;
 import fr.unice.politech.borneappetit.model.Table;
 import fr.unice.politech.borneappetit.model.TableOrder;
-import fr.unice.politech.borneappetit.repository.OrderRepository;
 
 import org.springframework.stereotype.Service;
 
@@ -18,13 +17,11 @@ import java.util.stream.Collectors;
 public class OrderService {
     private final TableService tableService;
     private final MenuService menuService;
-    private final OrderRepository orderRepository;
     private Map<String, OrderDto[]> orderlist;
 
-    public OrderService(TableService tableService, MenuService menuService, OrderRepository orderRepository) {
+    public OrderService(TableService tableService, MenuService menuService) {
         this.tableService = tableService;
         this.menuService = menuService;
-        this.orderRepository = orderRepository;
     }
 
     public List create(OrderDto order) throws Exception {

@@ -1,6 +1,5 @@
 package fr.unice.politech.borneappetit.service;
 
-import fr.unice.politech.borneappetit.model.Preparation;
 import fr.unice.politech.borneappetit.model.Table;
 import fr.unice.politech.borneappetit.model.TableOrder;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -34,6 +34,18 @@ public class TableService {
             }
         }
         return Optional.empty();
+    }
+
+    public boolean isAvailable(Long tableId) {
+        Table[] tables = getAll();
+
+        for (Table table : tables) {
+            if (!table.isTaken() && Objects.equals(table.getNumber(), tableId)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public Table findByID(String id) {

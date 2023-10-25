@@ -5,7 +5,9 @@ import fr.unice.politech.borneappetit.repository.ClientOrderRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class BillingService {
@@ -41,5 +43,23 @@ public class BillingService {
             }
         }
         return cost;
+    }
+
+    public List<ClientOrderEntity> payRemainingForTable(Long tableId) {
+        List<ClientOrderEntity> orders = this.clientOrderRepository.findNotBilledOrdersForTable(tableId);
+        for (ClientOrderEntity order : orders) {
+            order.billed = true;
+        }
+        return this.clientOrderRepository.saveAll(orders);
+    }
+
+    public ClientOrderEntity payForClient(Long tableId, Long clientId) {
+        Optional<ClientOrderEntity> clientOrderEntity = this.clientOrderRepository.findNotBilledByTableIdAndClientId(tableId, clientId);
+        if (clientOrderEntity.isPresent()) {
+            ClientOrderEntity update = clientOrderEntity.get();
+            update.billed = true;
+            return this.clientOrderRepository.save(update);
+        }
+        return null;
     }
 }

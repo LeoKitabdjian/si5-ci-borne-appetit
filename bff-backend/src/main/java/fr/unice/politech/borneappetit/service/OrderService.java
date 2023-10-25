@@ -45,7 +45,6 @@ public class OrderService {
                 tableService.addItemToTable(tableOrderId, menuId, menu.getShortName(), howMany);
             }
 
-            // tableService.payForOrder(tableOrderId);
             System.out.println("Envoi de la commande pour préparation");
             tableService.sendOrderToPreparation(tableOrderId);
             System.out.println("Envoi de la réponse au client (id de la commande et numéro de table)");

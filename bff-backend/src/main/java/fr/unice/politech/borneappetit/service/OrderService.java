@@ -110,7 +110,7 @@ public class OrderService {
 
                 MenuDto menu = menusMap.get(menuId);
                 System.out.println(menu);
-                cost += menu.getPrice();
+                cost += menu.getPrice() * howMany;
                 tableOrder = tableService.addItemToTable(tableOrder.getId(), menuId, menu.getShortName(), howMany);
             }
             o.setCost(cost);

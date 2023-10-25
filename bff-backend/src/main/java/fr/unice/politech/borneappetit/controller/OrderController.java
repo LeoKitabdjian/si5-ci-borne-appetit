@@ -26,7 +26,7 @@ public class OrderController {
     }
 
     @GetMapping("/{tableId}")
-    @Operation(summary = "Return a list of items of order of table (only the items for the order in progress) ")
+    @Operation(summary = "Return a list of items of order of table (only the items for the order in progress that is unordered) ")
     public Object getOrder(@PathVariable Long tableId) {
         System.out.println("Envoi des details de la commande le cours au client (request-reply)");
         return this.orderService.getOrderForTable(tableId);

@@ -42,27 +42,4 @@ public class PreparationService {
         preparations.put("started", get(tableNumber, "preparationStarted"));
         return preparations;
     }
-
-    public List<MenuDto> sortMenus(MenuDto[] menus, String sortBy, String sortOrder) {
-        Comparator<MenuDto> menuComparator = getComparator(sortBy);
-
-        if ("desc".equalsIgnoreCase(sortOrder)) {
-            menuComparator = menuComparator.reversed();
-        }
-
-        return Arrays.stream(menus)
-                .sorted(menuComparator)
-                .collect(Collectors.toList());
-    }
-
-    private Comparator<MenuDto> getComparator(String sortBy) {
-        return switch (sortBy) {
-            case "id" -> Comparator.comparing(MenuDto::getId);
-            case "shortName" -> Comparator.comparing(MenuDto::getShortName);
-            case "price" -> Comparator.comparing(MenuDto::getPrice);
-            case "category" -> Comparator.comparing(MenuDto::getCategory);
-            case "image" -> Comparator.comparing(MenuDto::getImage);
-            default -> Comparator.comparing(MenuDto::getFullName); // sort by fullName by default
-        };
-    }
 }

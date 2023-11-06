@@ -3,8 +3,16 @@ package fr.unice.politech.borneappetit.service;
 import fr.unice.politech.borneappetit.model.ClientOrderEntity;
 import fr.unice.politech.borneappetit.repository.ClientOrderRepository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -70,10 +78,22 @@ public class BillingService {
         for (ClientOrderEntity order : orders) {
             order.billed = true;
         }
+        try {
+            sendPostRequestBilling(tableId);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
         return this.clientOrderRepository.saveAll(orders);
     }
 
     public ClientOrderEntity payForClient(Long tableId, Long clientId) {
+        if (isEveryClientBilledExceptOne(tableId, clientId)){
+            try {
+                sendPostRequestBilling(tableId);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
         Optional<ClientOrderEntity> clientOrderEntity = this.clientOrderRepository.findNotBilledByTableIdAndClientId(tableId, clientId);
         if (clientOrderEntity.isPresent()) {
             ClientOrderEntity update = clientOrderEntity.get();
@@ -81,5 +101,25 @@ public class BillingService {
             return this.clientOrderRepository.save(update);
         }
         return null;
+    }
+
+    public boolean isEveryClientBilledExceptOne(Long tableId,Long clientId) {
+        for (ClientOrderEntity order : this.clientOrderRepository.findNotBilledOrdersForTable(tableId)) {
+            if (!order.isBilled() && !order.getClientId().equals(clientId)) {
+                return false;
+            }
+        }
+        return true;
+    }    
+
+    public void sendPostRequestBilling(Long tableId) throws URISyntaxException{
+        String url = apiUrl+"/dining/tableOrders/"+tableId.toString()+"/bill";
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
+        
+        RequestEntity<?> requestEntity = new RequestEntity<>(headers, HttpMethod.POST, new URI(url));
+
+        restTemplate.exchange(requestEntity, String.class);
     }
 }

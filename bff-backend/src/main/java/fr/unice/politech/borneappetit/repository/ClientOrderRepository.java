@@ -17,7 +17,7 @@ public interface ClientOrderRepository extends JpaRepository<ClientOrderEntity, 
     @Query("SELECT co FROM client_orders co WHERE co.tableId = :tableId AND co.clientId = :clientId AND co.billed = false")
     Optional<ClientOrderEntity> findNotBilledByTableIdAndClientId(@Param("tableId") Long tableId, @Param("clientId") Long clientId);
 
-    @Query("SELECT co FROM client_orders co WHERE co.tableId = :tableId AND co.ordered = false")
+    @Query("SELECT co FROM client_orders co WHERE co.tableId = :tableId AND co.billed = false AND co.billingStarted = false")
     List<ClientOrderEntity> findNotOrderedOrdersForTable(@Param("tableId") Long tableId);
 
     @Query("SELECT co FROM client_orders co WHERE co.tableId = :tableId AND co.ordered = true AND co.billed = false")

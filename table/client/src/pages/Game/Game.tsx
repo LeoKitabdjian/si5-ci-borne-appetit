@@ -9,29 +9,31 @@ interface GameProps {}
 const POLL_INTERVAL = 1;
 let paymentStarted = false;
 
-function startPolling() {
-    hasPaymentStarted().then((r) => {
-        if (r === true) {
-            paymentStarted = true;
-            GoToPayment();
-        }
-    }).catch((error) => {
-        console.log(error)
-    }).finally(()=> {
-        if (!paymentStarted) {
-            setTimeout(startPolling, POLL_INTERVAL * 1000);
-        }
-    })
-}
-
-function GoToPayment() {
+const Game: FC<GameProps> = () => {
     const navigate = useNavigate();
     const urlParams = useSearchParams()[0].toString();
-    navigate('/payment?' + urlParams);
-}
-
-const Game: FC<GameProps> = () => {
-    startPolling();
+    const startPolling = () => {
+        return new Promise<void>((resolve, reject) => {
+            hasPaymentStarted().then((r) => {
+                if (r === true) {
+                    console.log("Le paiement a commencé")
+                    paymentStarted = true;
+                    resolve()
+                }
+            }).catch((error) => {
+                console.log(error)
+            }).finally(()=> {
+                if (!paymentStarted) {
+                    setTimeout(startPolling, POLL_INTERVAL * 1000);
+                }
+            })
+        })
+    }
+    startPolling().then(() => {
+        navigate('/payment?' + urlParams);
+    }).catch((error) => {
+        console.log(error);
+    })
     const {t} = useTranslation();
     return <div className={styles.Game}>
         <h2>{t('game.welcome')}</h2>

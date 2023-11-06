@@ -67,6 +67,15 @@ public class MenuController {
         }
     }
 
+    @GetMapping("items")
+    @Operation(summary = "Get a list of items")
+    public ResponseEntity getItems() {
+        System.out.println("Reception de la demande des items");
+        List<MenuDto> menus = List.of(menuService.getAll());
+        return ResponseEntity.ok(Arrays.stream(this.menuService.getAll())
+                .collect(Collectors.toMap(MenuDto::getId, ItemDto::fromMenuDto)));
+    }
+
     @GetMapping("/sorted")
     @Operation(summary = "Get a list of menus sorted by specified criteria.")
     public ResponseEntity<List<MenuDto>> getSortedMenus(

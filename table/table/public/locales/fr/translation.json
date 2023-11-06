@@ -1,0 +1,39 @@
+{
+  "standby": {
+    "title": "Bienvenue sur <0>Borne'Appétit</0>",
+    "subtitle": "La solution numéro 1 pour gérer vos services de commande via des bornes !",
+    "button": "Appuyer n'importe où sur l'écran pour commander"
+  },
+  "selection": {
+    "order": "Récapitulatif de la table",
+    "total": "Total",
+    "item_zero": "{{count}} article",
+    "item_one": "{{count}} article",
+    "item_other": "{{count}} articles",
+    "price_zero": "{{count}} euro",
+    "price_one": "{{count}} euro",
+    "price_other": "{{count}} euros"
+  },
+  "action": {
+    "cancel": "Annuler",
+    "order": "Commander",
+    "continue": "Continuer"
+  },
+  "table": {
+    "title": "Votre numéro de table est le <0>{{number}}</0>",
+    "subtitle": "Nous allons vous apporter votre commande dès que possible !",
+    "error": "Identifiant de table manquant sur votre tablette."
+  },
+  "game": {
+    "welcome": "Ceci est un jeu"
+  },
+  "payment": {
+    "pay": "Payer ma part"
+  },
+  "error": {
+    "order": "Erreur lors de votre commande",
+    "tableId": "Votre tablette n'est pas associée à une table",
+    "clientId": "Votre tablette n'est pas associée à un client",
+    "noTable": "Aucune table de disponible"
+  }
+}

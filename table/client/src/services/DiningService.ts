@@ -9,7 +9,7 @@ export function sendOrder(order: Order) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(order)
+            body: JSON.stringify(order.items)
         }).then((response) => response.json()).then(result => {
             console.log(result);
             resolve();

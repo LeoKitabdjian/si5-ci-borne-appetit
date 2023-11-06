@@ -3,7 +3,6 @@ package fr.unice.politech.borneappetit.service;
 import fr.unice.politech.borneappetit.model.ClientOrderEntity;
 import fr.unice.politech.borneappetit.repository.ClientOrderRepository;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -57,7 +56,7 @@ public class BillingService {
                 if (order.isBilled()) {
                     return 0;
                 }
-                return order.getCost();
+                return order.getPrice();
             }
         }
         return -1;
@@ -67,7 +66,7 @@ public class BillingService {
         double cost = 0;
         for (ClientOrderEntity order : this.clientOrderRepository.findNotBilledOrdersForTable(tableId)) {
             if (!order.isBilled()) {
-                cost += order.getCost();
+                cost += order.getPrice();
             }
         }
         return cost;

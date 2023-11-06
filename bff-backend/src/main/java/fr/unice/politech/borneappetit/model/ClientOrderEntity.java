@@ -20,7 +20,8 @@ public class ClientOrderEntity {
     @CollectionTable(name="items", joinColumns=@JoinColumn(name="item_id"))
     public Map<String, Integer> items;
     public boolean ordered = false;
-    public double cost = 0;
+    @Column(name = "cost")
+    public double price = 0;
     public String orderUuid = ""; // the unique order (order id) related to this client order in restaurant service
     public boolean billed = false;
     public boolean billingStarted = false;

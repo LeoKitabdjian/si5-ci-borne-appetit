@@ -59,16 +59,29 @@ public class OrderService {
      */
     public ClientOrderEntity addOrUpdateClientOrder(ClientOrderDto orderDto) {
         Optional<ClientOrderEntity> existingOrder = clientOrderRepository.findNotOrderedByTableIdAndClientId(orderDto.getTable(), orderDto.getClient());
+        Map<String, MenuDto> menusMap = Arrays.stream(this.menuService.getAll())
+                .collect(Collectors.toMap(MenuDto::getId, menu -> menu));
+
+        double cost = 0;
+        for (Map.Entry<String, Integer> entry : orderDto.items.entrySet()) {
+            String menuId = entry.getKey();
+            Integer howMany = entry.getValue();
+
+            MenuDto menu = menusMap.get(menuId);
+            cost += menu.getPrice() * howMany;
+        }
 
         if (existingOrder.isPresent()) {
             ClientOrderEntity orderToUpdate = existingOrder.get();
             if (!orderToUpdate.isOrdered()) {
                 orderToUpdate.setItems(orderDto.getItems());
+                orderToUpdate.setPrice(cost);
                 return clientOrderRepository.save(orderToUpdate);
             }
         }
 
         ClientOrderEntity newOrder = ClientOrderEntity.fromDto(orderDto);
+        newOrder.setPrice(cost);
         return clientOrderRepository.save(newOrder);
     }
 
@@ -79,8 +92,8 @@ public class OrderService {
 
         unordered.forEach(order -> {
             Map<String, Object> clientOrder = new HashMap<>();
-            clientOrder.put("items", order.getItems()); // assuming getItems() returns a Map of item id to quantity
-            clientOrder.put("price", order.getCost()); // assuming getCost() returns the cost of the order
+            clientOrder.put("items", order.getItems());
+            clientOrder.put("price", order.getPrice());
 
             response.put(order.getClientId(), clientOrder);
         });
@@ -104,17 +117,13 @@ public class OrderService {
                 .collect(Collectors.toMap(MenuDto::getId, menu -> menu));
         System.out.println("Ajout des items à la table");
         for (ClientOrderEntity o : unordered) {
-            double cost = 0;
             for (Map.Entry<String, Integer> entry : o.items.entrySet()) {
                 String menuId = entry.getKey();
                 Integer howMany = entry.getValue();
 
                 MenuDto menu = menusMap.get(menuId);
-                System.out.println(menu);
-                cost += menu.getPrice() * howMany;
                 tableOrder = tableService.addItemToTable(tableOrder.getId(), menuId, menu.getShortName(), howMany);
             }
-            o.setCost(cost);
             o.setOrderUuid(tableOrder.getId());
             this.clientOrderRepository.save(o);
         }

@@ -1,7 +1,7 @@
 export function hasPaymentStarted() {
     const urlParams = new URLSearchParams(window.location.search);
     return new Promise<any>((resolve, reject) => {
-        console.log("On check si le paiement à commencé")
+        console.log("On check l'état du paiement")
         fetch("http://localhost:8080/billings/" + urlParams.get("tableId") + "/start", {
             method: "GET",
             headers: {

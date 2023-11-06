@@ -30,7 +30,8 @@
     "welcome": "Ceci est un jeu"
   },
   "payment": {
-    "pay": "Payer ma part"
+    "pay": "Payer ma part",
+    "done": "Paiement effectué"
   },
   "error": {
     "order": "Erreur lors de votre commande",

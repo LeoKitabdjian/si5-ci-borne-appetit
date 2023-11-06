@@ -14,9 +14,11 @@ let paymentFinished = false;
 
 function pay() {
     console.log("Paying...");
-    //TODO enlever les autres div et afficher la div "paiement effectué"
     payClient().then((r) => {
-
+        // @ts-ignore
+        document.getElementById("paymentContainer").style.display = "none";
+        // @ts-ignore
+        document.getElementById("paymentDone").style.display = "block";
     }).catch((error) => {
 
     })
@@ -56,9 +58,11 @@ const Payment: FC<PaymentProps> = () => {
         console.log(error);
     })
     return <div className={styles.Payment}>
-        <div id={"amount"}></div>
-        <Button onClick={pay} text={t('payment.pay')} type={ButtonType.Primary}/>
-        <div className={styles.paymentDone}>{t('payment.done')}</div>
+        <div id={"paymentContainer"} className={styles.paymentContainer}>
+            <div id={"amount"}></div>
+            <Button onClick={pay} text={t('payment.pay')} type={ButtonType.Primary}/>
+        </div>
+        <div id={"paymentDone"} className={styles.paymentDone}>{t('payment.done')}</div>
     </div>
 };
 

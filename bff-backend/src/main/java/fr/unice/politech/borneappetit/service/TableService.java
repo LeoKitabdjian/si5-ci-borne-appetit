@@ -102,4 +102,20 @@ public class TableService {
         ResponseEntity<TableOrder> responseEntity = restTemplate.postForEntity(apiUrl + "/dining/tableOrders/" + tableId + "/bill", new HttpEntity<>(null, headers), TableOrder.class);
         return responseEntity.getBody();
     }
+
+    public TableOrder[] getAllTableOrders() {
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<TableOrder[]> responseEntity = restTemplate.getForEntity(apiUrl + "/dining/tableOrders", TableOrder[].class);
+        return responseEntity.getBody();
+    }
+
+    public String getTableOrderIdFromTableNumber(long numberId){
+        TableOrder[] tableOrders = getAllTableOrders();
+        for (TableOrder tableOrder : tableOrders) {
+            if (tableOrder.getTableNumber() == numberId) {
+                return tableOrder.getId();
+            }
+        }
+        return null;
+    }
 }

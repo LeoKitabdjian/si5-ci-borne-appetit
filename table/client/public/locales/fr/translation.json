@@ -29,9 +29,13 @@
   "game": {
     "welcome": "Ceci est un jeu"
   },
+  "payment": {
+    "pay": "Payer ma part"
+  },
   "error": {
     "order": "Erreur lors de votre commande",
     "tableId": "Votre tablette n'est pas associée à une table",
+    "clientId": "Votre tablette n'est pas associée à un client",
     "noTable": "Aucune table de disponible"
   }
 }

@@ -15,9 +15,11 @@ const Standby = () => {
 
     const queryParams = new URLSearchParams(currentLocation.search);
     const tableId = queryParams.get('tableId');
+    const clientId = queryParams.get('clientId');
 
     localStorage.setItem("urlParams", urlParams);
     if (!tableId) navigate('/error?' + urlParams, {state: {error: t('error.tableId')}})
+    if (!clientId) navigate('/error?' + urlParams, {state: {error: t('error.clientId')}})
 
     const gotoOrdering = () => loadData()
         .then((response) => {

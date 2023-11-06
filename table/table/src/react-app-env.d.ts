@@ -12,11 +12,9 @@ type Items = {
 }
 
 type Item = {
+    id: string;
     name: string;
     price: number;
-    image: string;
-    shortName: string;
-    category: string;
 }
 
 

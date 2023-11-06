@@ -1,10 +1,8 @@
 import React from 'react';
 import styles from './Selection.module.sass';
-import Item from "./Item/Item";
 import {Order} from "../../order";
-import {OrderAction} from "../../order.action";
 import {withTranslation} from "react-i18next";
-import {CustomerAction} from "../../customer.action";
+import Customer from "./Customer/Customer";
 
 interface SelectionProps {
     t: any;
@@ -26,14 +24,9 @@ class Selection extends React.Component<SelectionProps> {
             <div className={styles.Header}>
                 <h1>{t('selection.order')}</h1>
             </div>
-            <div className={styles.Items}>
-                {Object.entries(this.props.order.getCustomers()).map(([id, quantity]) => {
-                    return <Item key={id} quantity={quantity}
-                                 id={id}
-                                 name={this.getItem(id).name}
-                                 //price={this.props.order.getPrice(id, this.props.items)}
-                                 price={0}
-                    />
+            <div className={styles.Customers}>
+                {this.props.order.getClientIds().map((clientId) => {
+                    return <Customer items={this.props.items} clientId={clientId} orderRecord={this.props.order[clientId]}/>
                 })}
             </div>
             <div className={styles.Footer}>

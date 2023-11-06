@@ -31,7 +31,8 @@
   },
   "payment": {
     "pay": "Payer ma part",
-    "done": "Paiement effectué"
+    "done": "Paiement effectué",
+    "amountToPay": "Montant à payer"
   },
   "error": {
     "order": "Erreur lors de votre commande",

@@ -72,16 +72,18 @@ public class OrderService {
         return clientOrderRepository.save(newOrder);
     }
 
-    public Object getOrderForTable(Long tableId) {
+    public Map<Long, Map<String, Object>> getOrderForTable(Long tableId) {
         List<ClientOrderEntity> unordered = this.clientOrderRepository.findNotOrderedOrdersForTable(tableId);
 
-        Map response = new HashMap<>();
+        Map<Long, Map<String, Object>> response = new HashMap<>();
 
-        response.put("customers", unordered.stream()
-                .map(ClientOrderEntity::getClientId)
-                .distinct()
-                .count());
-        response.put("items", unordered);
+        unordered.forEach(order -> {
+            Map<String, Object> clientOrder = new HashMap<>();
+            clientOrder.put("items", order.getItems()); // assuming getItems() returns a Map of item id to quantity
+            clientOrder.put("price", order.getCost()); // assuming getCost() returns the cost of the order
+
+            response.put(order.getClientId(), clientOrder);
+        });
 
         return response;
     }

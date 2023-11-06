@@ -3,6 +3,7 @@ package fr.unice.politech.borneappetit.controller;
 import fr.unice.politech.borneappetit.model.ClientOrderEntity;
 import fr.unice.politech.borneappetit.service.BillingService;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,18 @@ public class BillingController {
         return this.billingService.getRemainingBillForTable(tableId);
     }
 
+    @GetMapping("/{tableId}/start")
+    @Operation(summary ="Check if the billing start for the table")
+    public boolean isBillingStartForTable(@PathVariable Long tableId){
+        return this.billingService.isBillingStartForTable(tableId);
+    }
+
+    @PostMapping("/{tableId}/start")
+    @Operation(summary ="Mark the billing for the given table as started")
+    public boolean startBillingStartForTable(@PathVariable Long tableId){
+        return this.billingService.startBillingStartForTable(tableId);
+    }
+
     @GetMapping("/{tableId}/{clientId}")
     @Operation(summary ="Get the addition for a specific client")
     public double clientAddition(@PathVariable Long tableId, @PathVariable Long clientId){
@@ -31,15 +44,23 @@ public class BillingController {
 
     @PostMapping("/{tableId}")
     @Operation(summary ="Pay all unpaid order for the table")
-    public List<ClientOrderEntity> payTable(@PathVariable Long tableId){
-        // todo: payment in the microservices
-        System.out.println("todo: payment in the microservices");
-        return this.billingService.payRemainingForTable(tableId);
+    public ResponseEntity payTable(@PathVariable Long tableId){
+        if (this.billingService.isBillingStartForTable(tableId)) {
+            // todo: payment in the microservices
+            System.out.println("todo: payment in the microservices");
+            return ResponseEntity.ok(this.billingService.payRemainingForTable(tableId));
+        } else {
+            return ResponseEntity.status(409).body("Impossible to bill for a table for which billing has not yet begun");
+        }
     }
 
     @PostMapping("/{tableId}/{clientId}")
     @Operation(summary ="Pay for the client")
-    public ClientOrderEntity payForClient(@PathVariable Long tableId, @PathVariable Long clientId){
-        return this.billingService.payForClient(tableId, clientId);
+    public ResponseEntity payForClient(@PathVariable Long tableId, @PathVariable Long clientId){
+        if (this.billingService.isBillingStartForTable(tableId)) {
+            return ResponseEntity.ok(this.billingService.payForClient(tableId, clientId));
+        } else {
+            return ResponseEntity.status(409).body("Impossible to bill for a client for which billing has not yet begun for his table");
+        }
     }
 }

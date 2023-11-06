@@ -23,6 +23,7 @@ public class ClientOrderEntity {
     public double cost = 0;
     public String orderUuid = ""; // the unique order (order id) related to this client order in restaurant service
     public boolean billed = false;
+    public boolean billingStarted = false;
 
     public static ClientOrderEntity fromDto(ClientOrderDto orderDto) {
         ClientOrderEntity o = new ClientOrderEntity();

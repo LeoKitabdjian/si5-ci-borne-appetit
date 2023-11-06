@@ -23,6 +23,26 @@ public class BillingService {
         this.clientOrderRepository = clientOrderRepository;
     }
 
+    public boolean isBillingStartForTable(Long tableId) {
+        List<ClientOrderEntity> orders = this.clientOrderRepository.findNotBilledOrdersForTable(tableId);
+        if (!orders.isEmpty()) {
+            return orders.get(0).billingStarted;
+        }
+        return false;
+    }
+
+    public boolean startBillingStartForTable(Long tableId) {
+        List<ClientOrderEntity> orders = this.clientOrderRepository.findNotBilledOrdersForTable(tableId);
+        if (!isBillingStartForTable(tableId)) {
+            for (ClientOrderEntity order : orders) {
+                order.billingStarted = true;
+            }
+            this.clientOrderRepository.saveAll(orders);
+            return true;
+        }
+        return false;
+    }
+
     public double getBillingForClient(Long tableId, Long clientId) {
         for (ClientOrderEntity order : this.clientOrderRepository.findNotBilledOrdersForTable(tableId)) {
             if (Objects.equals(order.getClientId(), clientId)) {

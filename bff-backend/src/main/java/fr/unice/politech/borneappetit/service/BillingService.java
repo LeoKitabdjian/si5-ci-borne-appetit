@@ -113,7 +113,7 @@ public class BillingService {
     }    
 
     public void sendPostRequestBilling(Long tableId) throws URISyntaxException{
-        String url = "http://localhost:9500/dining/tableOrders/"+tableId.toString()+"/bill";
+        String url = apiUrl+"/dining/tableOrders/"+tableId.toString()+"/bill";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);

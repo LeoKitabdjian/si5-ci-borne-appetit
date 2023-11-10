@@ -1,11 +1,16 @@
 @import "public/variables"
 
+.Heading
+  display: flex
+  flex-direction: row
+  grid-area: search
+  gap: 2vh
+
 .SearchBar
   width: 100%
   display: flex
   background: white
   border-radius: 1vh
-  grid-area: search
   align-items: center
   @include shadow
 
@@ -17,13 +22,23 @@
     padding: 1vh 0 1vh 1vh
     background: transparent
 
-  img
+  svg
     height: 3vh
+    font-size: 3vh
     aspect-ratio: 1/1
     padding: 1vh
     box-sizing: content-box
     user-select: none
     -webkit-user-drag: none
 
-.Keyboard
-  display: none
+.TabletteData
+  background: white
+  border-radius: 1vh
+  text-wrap: none
+  white-space: nowrap
+  font-size: 1.75vh
+  padding: 1vh
+  display: flex
+  flex-direction: row
+  align-items: center
+  @include shadow

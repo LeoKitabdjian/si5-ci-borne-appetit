@@ -1,0 +1,34 @@
+@import "/public/variables"
+
+.Table
+  width: 100%
+  height: 100%
+  cursor: pointer
+  display: flex
+  flex-direction: column
+  *
+    user-select: none
+
+  main
+    padding: 4vh
+    text-transform: uppercase
+    flex: auto
+    display: flex
+    flex-direction: column
+    justify-content: space-evenly
+
+    h1
+      font-size: 3vh
+      font-weight: 700
+      span
+        color: $main
+
+    h2
+      font-size: 2.5vh
+
+    .title
+      display: flex
+      flex-direction: column
+      justify-content: space-around
+      height: 25vh
+      color: $background-color

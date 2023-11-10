@@ -1,0 +1,32 @@
+{
+  "selection": {
+    "order": "Récapitulatif de la table",
+    "total": "Total",
+    "item_zero": "{{count}} article",
+    "item_one": "{{count}} article",
+    "item_other": "{{count}} articles",
+    "price_zero": "{{count}} euro",
+    "price_one": "{{count}} euro",
+    "price_other": "{{count}} euros"
+  },
+  "action": {
+    "order": "Valider la commande"
+  },
+  "table": {
+    "title": "Votre numéro de table est le <0>{{number}}</0>",
+    "subtitle": "Nous allons vous apporter votre commande dès que possible !",
+    "error": "Identifiant de table manquant sur votre tablette."
+  },
+  "game": {
+    "welcome": "Page de jeu",
+    "order": "Suivi de la commande"
+  },
+  "payment": {
+    "pay": "Payer ma part"
+  },
+  "error": {
+    "order": "Erreur lors de votre commande",
+    "tableId": "L'association de cette tablette à une table n'est pas valide",
+    "fetchingData": "Impossible de récupérer les données de la table"
+  }
+}

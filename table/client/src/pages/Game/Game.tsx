@@ -11,7 +11,7 @@ interface GameProps {
 }
 
 const POLL_INTERVAL = 1;
-let paymentStarted = true;
+let paymentStarted = false;
 
 class GameWithoutHook extends React.Component<GameProps> {
 

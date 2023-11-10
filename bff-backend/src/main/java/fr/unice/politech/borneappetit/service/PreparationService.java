@@ -1,5 +1,6 @@
 package fr.unice.politech.borneappetit.service;
 
+import fr.unice.politech.borneappetit.dto.MenuDto;
 import fr.unice.politech.borneappetit.model.CookedItem;
 import fr.unice.politech.borneappetit.model.Preparation;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,12 +9,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class PreparationService {
     @Value("${gateway_url}")
     String apiUrl;
+
+    private final MenuService menuService;
+
+    public PreparationService(MenuService menuService) {
+        this.menuService = menuService;
+    }
 
     /**
      * Get the preparation for the given table number
@@ -68,7 +76,15 @@ public class PreparationService {
     }
 
     private Map<String, Long> countPreparedItems(List<CookedItem> items) {
+        MenuDto[] menus = this.menuService.getAll();
         return items.stream()
-                .collect(Collectors.groupingBy(CookedItem::getShortName, Collectors.counting()));
+                .collect(Collectors.groupingBy(cookedItem -> {
+                    for (MenuDto menu : menus) {
+                        if (Objects.equals(menu.getShortName(), cookedItem.getShortName())) {
+                            return menu.getId();
+                        }
+                    }
+                    return cookedItem.getShortName();
+                }, Collectors.counting()));
     }
 }

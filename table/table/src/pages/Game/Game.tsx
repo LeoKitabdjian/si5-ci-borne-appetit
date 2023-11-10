@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Game.module.sass';
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
-import {useTranslation, withTranslation} from "react-i18next";
+import {useTranslation} from "react-i18next";
 import {getPreparations} from "../../services/PreparationService";
 import PreparationItem from "../../components/PreparationItem/PreparationItem";
 import Button from "../../components/Button/Button";
@@ -27,12 +27,13 @@ if (!tableId) {
 
 class GameWithoutHook extends React.Component<GameProps, GameState> {
 
+    preparationInterval: any;
+
     constructor(props: GameProps) {
         super(props);
         this.state = {
             preparations: {
-                ready: [],
-                started: [],
+                ready: [], started: [],
             }
         };
     }
@@ -49,11 +50,13 @@ class GameWithoutHook extends React.Component<GameProps, GameState> {
 
     componentDidMount() {
         if (tableId) {
-            getPreparations(tableId).then((r) => {
-                this.setState({preparations: r})
-            }).catch((error) => {
-                console.log(error)
-            })
+            this.preparationInterval = setInterval(() => {
+                getPreparations(tableId as string).then((preparations) => {
+                    this.setState({preparations: preparations});
+                }).catch((error) => {
+                    console.log(error);
+                })
+            }, 5000);
         }
     }
 
@@ -64,32 +67,29 @@ class GameWithoutHook extends React.Component<GameProps, GameState> {
         <div className={styles.Order}>
             <h2>{this.props.t('game.order')}</h2>
 
-            <div>
-                <h3>{this.props.t('game.ready')}</h3>
-                <ul>
-                    {this.state.preparations.ready.map((item, index) => (
-                        <li key={index}>
+            <div className={styles.Items}>
+                <div>
+                    <h3>{this.props.t('game.ready')}</h3>
+                    <ul>
+                        {this.state.preparations.ready.map((item, index) => (<li key={index}>
                             {Object.entries(item).map(([ingredient, quantity]) => (
-                                <PreparationItem id={ingredient} quantity={quantity}/>
-                            ))}
-                        </li>
-                    ))}
-                </ul>
-            </div>
+                                <PreparationItem id={ingredient} quantity={quantity}/>))}
+                        </li>))}
+                    </ul>
+                </div>
 
-            <div>
-                <h3>{this.props.t('game.started')}</h3>
-                <ul>
-                    {this.state.preparations.started.map((item, index) => (
-                        <li key={index}>
+                <div>
+                    <h3>{this.props.t('game.started')}</h3>
+                    <ul>
+                        {this.state.preparations.started.map((item, index) => (<li key={index}>
                             {Object.entries(item).map(([ingredient, quantity]) => (
-                                <PreparationItem id={ingredient} quantity={quantity}/>
-                            ))}
-                        </li>
-                    ))}
-                </ul>
+                                <PreparationItem id={ingredient} quantity={quantity}/>))}
+                        </li>))}
+                    </ul>
+                </div>
             </div>
-            <Button onClick={() =>this.startPayment(this.props)} text={this.props.t('game.pay')} type={ButtonType.Primary}></Button>
+            <Button onClick={() => this.startPayment(this.props)} text={this.props.t('game.pay')}
+                    type={ButtonType.Primary}></Button>
         </div>
     </div>;
 }

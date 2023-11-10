@@ -20,7 +20,7 @@ class PreparationItem extends React.Component<PreparationItemProps, PreparationI
     }
 
     render = () => (<article className={styles.Item}>
-        this.state.items[this.props.id].name
+        {this.state.items[this.props.id] ? this.state.items[this.props.id].name : this.props.id}
         <span className={styles.Quantity}>(x{this.props.quantity})</span>
     </article>);
 }

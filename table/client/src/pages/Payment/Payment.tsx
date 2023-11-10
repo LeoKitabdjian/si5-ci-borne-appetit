@@ -20,7 +20,7 @@ function pay() {
         // @ts-ignore
         document.getElementById("paymentDone").style.display = "block";
     }).catch((error) => {
-
+        console.log(error);
     })
 }
 

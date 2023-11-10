@@ -51,7 +51,6 @@ class TableWithoutHook extends React.Component<TableProps, TableState> {
                     order: order
                 });
             }).catch(error => {
-                // Vous pouvez choisir de naviguer vers une page d'erreur ou de gérer l'erreur ici
                 console.error("An error occurred while fetching data:", error);
                 this.props.navigate('/error', {state: {error: t('error.fetchingData')}});
             });
@@ -63,7 +62,6 @@ class TableWithoutHook extends React.Component<TableProps, TableState> {
                         order: order
                     });
                 }).catch(error => {
-                    // Vous pouvez choisir de naviguer vers une page d'erreur ou de gérer l'erreur ici
                     console.error("An error occurred while fetching data:", error);
                     this.props.navigate('/error', {state: {error: t('error.fetchingData')}});
                 });

@@ -1,52 +1,31 @@
 import React from 'react';
 import styles from './Game.module.sass';
-import {useNavigate, useSearchParams} from "react-router-dom";
-import {withTranslation} from "react-i18next";
+import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
+import {useTranslation, withTranslation} from "react-i18next";
 import {getPreparations} from "../../services/PreparationService";
 import PreparationItem from "../../components/PreparationItem/PreparationItem";
 import Button from "../../components/Button/Button";
 import {ButtonType} from "../../components/Button/ButtonType";
+import {startTablePayment} from "../../services/BillingService";
 
 interface GameProps {
     t: any;
+    navigate: any;
+    location: any;
+    searchParams: any;
 }
 
 interface GameState {
     preparations: Preparations;
 }
 
-const POLL_INTERVAL = 5;
-let paymentStarted = false;
-
-function startPolling() {
-    const tableId = sessionStorage.getItem('tableId');
-
-/*
-    if (tableId) {
-        hasPaymentStarted(tableId).then((r) => {
-            if (r === true) {
-                paymentStarted = true;
-                GoToPayment();
-            }
-        }).catch((error) => {
-            console.log(error)
-        }).finally(() => {
-            if (!paymentStarted) {
-                setTimeout(startPolling, POLL_INTERVAL * 1000);
-            }
-        })
-    }
-
- */
+let tableId = sessionStorage.getItem('tableId');
+if (!tableId) {
+    let params = new URLSearchParams(window.location.search);
+    tableId = params.get("tableId");
 }
 
-function GoToPayment() {
-    const navigate = useNavigate();
-    const urlParams = useSearchParams()[0].toString();
-    navigate('/payment?' + urlParams);
-}
-
-class Game extends React.Component<GameProps, GameState> {
+class GameWithoutHook extends React.Component<GameProps, GameState> {
 
     constructor(props: GameProps) {
         super(props);
@@ -58,11 +37,17 @@ class Game extends React.Component<GameProps, GameState> {
         };
     }
 
+    startPayment(props: GameProps) {
+        if (tableId) {
+            startTablePayment(tableId).then(() => {
+                props.navigate('/payment?' + props.searchParams);
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+    }
+
     componentDidMount() {
-        startPolling();
-
-        const tableId = sessionStorage.getItem('tableId');
-
         if (tableId) {
             getPreparations(tableId).then((r) => {
                 this.setState({preparations: r})
@@ -104,9 +89,18 @@ class Game extends React.Component<GameProps, GameState> {
                     ))}
                 </ul>
             </div>
-            <Button text={this.props.t('game.pay')} type={ButtonType.Primary}></Button>
+            <Button onClick={() =>this.startPayment(this.props)} text={this.props.t('game.pay')} type={ButtonType.Primary}></Button>
         </div>
     </div>;
 }
 
-export default withTranslation()(Game)
+function Game() {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [searchParams] = useSearchParams();
+    const [t] = useTranslation();
+
+    return <GameWithoutHook navigate={navigate} location={location} searchParams={searchParams} t={t}/>;
+}
+
+export default Game

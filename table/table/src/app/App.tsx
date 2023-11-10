@@ -2,9 +2,9 @@ import React from 'react';
 import styles from "./App.module.sass";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import Table from "../pages/Table/Table";
-import Game from "../pages/Game/Game";
 import Payment from "../pages/Payment/Payment";
 import Error from "../pages/Error/Error";
+import Game from "../pages/Game/Game";
 
 const App = () => (
     <div className={styles.App}>

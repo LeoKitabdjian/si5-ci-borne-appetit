@@ -11,17 +11,24 @@ interface PaymentProps {}
 const POLL_INTERVAL = 1;
 
 let paymentFinished = false;
+let tableId = sessionStorage.getItem('tableId');
+if (!tableId) {
+    let params = new URLSearchParams(window.location.search);
+    tableId = params.get("tableId");
+}
 
 function pay() {
     console.log("Paying...");
-    payTable().then((r) => {
-        // @ts-ignore
-        document.getElementById("paymentContainer").style.display = "none";
-        // @ts-ignore
-        document.getElementById("paymentDone").style.display = "block";
-    }).catch((error) => {
-        console.log(error);
-    })
+    if (tableId) {
+        payTable(tableId).then((r) => {
+            // @ts-ignore
+            document.getElementById("paymentContainer").style.display = "none";
+            // @ts-ignore
+            document.getElementById("paymentDone").style.display = "block";
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
 }
 
 const Payment: FC<PaymentProps> = () => {
@@ -29,23 +36,20 @@ const Payment: FC<PaymentProps> = () => {
     const urlParams = useSearchParams()[0].toString();
     const {t} = useTranslation();
     //TODO table amount changed
-    getTableAmount().then((result) => {
-        console.log("Montant à payer", result);
-        // @ts-ignore
-        document.getElementById("amount").innerText = t('payment.amountToPay') + " : " + result + "€";
-    }).catch((error) => {
-        console.log(error);
-    })
+    if (tableId) {
+        getTableAmount(tableId).then((result) => {
+            console.log("Montant à payer", result);
+            // @ts-ignore
+            document.getElementById("amount").innerText = t('payment.amountToPay') + " : " + result + "€";
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
     const startPolling = () => {
         return new Promise<void>((resolve, reject) => {
-            let tableId = sessionStorage.getItem('tableId');
-            if (!tableId) {
-                let params = new URLSearchParams(window.location.search);
-                tableId = params.get("tableId");
-            }
             if (tableId) {
                 hasPaymentStarted(tableId).then((r) => {
-                    if (r === true) {
+                    if (r === false) {
                         console.log("Le paiement est terminé")
                         paymentFinished = true;
                         resolve();

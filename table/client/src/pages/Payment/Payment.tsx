@@ -38,7 +38,7 @@ const Payment: FC<PaymentProps> = () => {
     const startPolling = () => {
         return new Promise<void>((resolve, reject) => {
             hasPaymentStarted().then((r) => {
-                if (r === true) {
+                if (r === false) {
                     console.log("Le paiement est terminé")
                     paymentFinished = true;
                     resolve();

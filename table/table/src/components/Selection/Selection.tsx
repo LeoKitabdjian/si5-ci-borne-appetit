@@ -16,13 +16,13 @@ class Selection extends React.Component<SelectionProps> {
         super(props);
     }
 
-    getItem = (id: string): Item => this.props.items[id];
+    tableId = sessionStorage.getItem('tableId');
 
     render() {
         const {t} = this.props;
         return <div className={styles.Selection}>
             <div className={styles.Header}>
-                <h1>{t('selection.order')}</h1>
+                <h1>{t('selection.order')} ({this.tableId})</h1>
             </div>
             <div className={styles.Customers}>
                 {this.props.order.getClientIds().map((clientId) => {

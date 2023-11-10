@@ -4,6 +4,9 @@
     "subtitle": "La solution numéro 1 pour gérer vos services de commande via des bornes !",
     "button": "Appuyer n'importe où sur l'écran pour commander"
   },
+  "ordering": {
+    "tabletteData": "Tablette {{number}}"
+  },
   "selection": {
     "order": "Votre commande",
     "total": "Total",
@@ -35,9 +38,9 @@
     "amountToPay": "Montant à payer"
   },
   "error": {
-    "order": "Erreur lors de votre commande",
-    "tableId": "Votre tablette n'est pas associée à une table",
-    "clientId": "Votre tablette n'est pas associée à un client",
-    "noTable": "Aucune table de disponible"
+    "order": "Erreur lors de votre commande.",
+    "tableId": "Votre tablette n'est pas associée à une table.",
+    "clientId": "Votre tablette n'est pas associée à un client valide (1, 2, 3 ou 4).",
+    "noTable": "Aucune table de disponible."
   }
 }

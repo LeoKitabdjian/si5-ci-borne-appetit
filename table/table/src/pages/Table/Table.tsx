@@ -35,9 +35,9 @@ class TableWithoutHook extends React.Component<TableProps, TableState> {
         const {t} = this.props;
 
         // check if the tableId is present in the session storage
-        let tableId = sessionStorage.getItem('tableId');
+        let tableId = this.props.searchParams.get('tableId');
         if (!tableId) {
-            tableId = this.props.searchParams.get('tableId');
+            tableId = sessionStorage.getItem('tableId');
         }
 
         if (tableId) {

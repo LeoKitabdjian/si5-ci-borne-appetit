@@ -18,8 +18,22 @@ const Standby = () => {
     const clientId = queryParams.get('clientId');
 
     localStorage.setItem("urlParams", urlParams);
-    if (!tableId) navigate('/error?' + urlParams, {state: {error: t('error.tableId')}})
-    if (!clientId) navigate('/error?' + urlParams, {state: {error: t('error.clientId')}})
+    if (tableId) {
+        sessionStorage.setItem('tableId', tableId);
+    } else {
+        navigate('/error?' + urlParams, {state: {error: t('error.tableId')}})
+    }
+
+    if (clientId) {
+        sessionStorage.setItem('clientId', clientId);
+        // parse the clientId into a number
+        const clientIdNumber = parseInt(clientId);
+        if (clientIdNumber > 4 || clientIdNumber < 1) {
+            navigate('/error?' + urlParams, {state: {error: t('error.clientId')}})
+        }
+    } else {
+        navigate('/error?' + urlParams, {state: {error: t('error.clientId')}})
+    }
 
     const gotoOrdering = () => loadData()
         .then((response) => {

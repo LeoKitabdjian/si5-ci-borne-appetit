@@ -19,7 +19,9 @@
   },
   "game": {
     "welcome": "Page de jeu",
-    "order": "Suivi de la commande"
+    "order": "Suivi de la commande",
+    "ready": "Prêts à être servis",
+    "started": "En cours de préparation"
   },
   "payment": {
     "pay": "Payer ma part"

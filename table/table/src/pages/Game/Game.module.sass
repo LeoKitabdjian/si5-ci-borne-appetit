@@ -1,2 +1,32 @@
-.Game
-  background-color: red
+@import "../../../public/variables"
+
+.Waiting
+  padding: 4vh
+  display: grid
+  grid-template-columns: 5fr 2fr
+  flex-direction: row
+  height: 100vh
+
+  .Game
+    h2
+      font-size: 6vh
+      text-transform: uppercase
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+      height: 100%
+      color: #e7c262
+      user-select: none
+
+  .Order
+    background: white
+    border-radius: 2vh
+    @include shadow
+    h2
+      padding: 1rem
+      font-size: 1.5vh
+      font-weight: 600
+      text-transform: uppercase
+      user-select: none
+

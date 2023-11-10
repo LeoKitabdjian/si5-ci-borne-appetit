@@ -2,9 +2,11 @@ import React, { FC } from 'react';
 import styles from './Game.module.sass';
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {hasPaymentStarted} from "../../services/BillingService";
-import {useTranslation} from "react-i18next";
+import {useTranslation, withTranslation} from "react-i18next";
 
-interface GameProps {}
+interface GameProps {
+    t: any;
+}
 
 const POLL_INTERVAL = 1;
 let paymentStarted = false;
@@ -33,12 +35,19 @@ function GoToPayment() {
     navigate('/payment?' + urlParams);
 }
 
-const Game: FC<GameProps> = () => {
-    startPolling();
-    const {t} = useTranslation();
-    return <div className={styles.Game}>
-        <h2>{t('game.welcome')}</h2>
-    </div>
-};
+class Game extends React.Component<GameProps> {
+    componentDidMount() {
+        startPolling();
+    }
 
-export default Game;
+    render = () => <div className={styles.Waiting}>
+        <div className={styles.Game}>
+            <h2>{this.props.t('game.welcome')}</h2>
+        </div>
+        <div className={styles.Order}>
+            <h2>{this.props.t('game.order')}</h2>
+        </div>
+    </div>;
+}
+
+export default withTranslation()(Game)

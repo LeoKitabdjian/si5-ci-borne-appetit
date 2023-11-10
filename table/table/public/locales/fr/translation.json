@@ -18,7 +18,8 @@
     "error": "Identifiant de table manquant sur votre tablette."
   },
   "game": {
-    "welcome": "Ceci est un jeu"
+    "welcome": "Page de jeu",
+    "order": "Suivi de la commande"
   },
   "payment": {
     "pay": "Payer ma part"

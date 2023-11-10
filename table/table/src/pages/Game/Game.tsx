@@ -10,18 +10,21 @@ const POLL_INTERVAL = 1;
 let paymentStarted = false;
 
 function startPolling() {
-    hasPaymentStarted().then((r) => {
-        if (r === true) {
-            paymentStarted = true;
-            GoToPayment();
-        }
-    }).catch((error) => {
-        console.log(error)
-    }).finally(()=> {
-        if (!paymentStarted) {
-            setTimeout(startPolling, POLL_INTERVAL * 1000);
-        }
-    })
+    const tableId = sessionStorage.getItem('tableId');
+    if(tableId) {
+        hasPaymentStarted(tableId).then((r) => {
+            if (r === true) {
+                paymentStarted = true;
+                GoToPayment();
+            }
+        }).catch((error) => {
+            console.log(error)
+        }).finally(()=> {
+            if (!paymentStarted) {
+                setTimeout(startPolling, POLL_INTERVAL * 1000);
+            }
+        })
+    }
 }
 
 function GoToPayment() {

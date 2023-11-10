@@ -3,27 +3,27 @@ import styles from './Table.module.sass';
 import {useLocation, useNavigate, useSearchParams} from "react-router-dom";
 import {useTranslation} from "react-i18next";
 import Selection from "../../components/Selection/Selection";
-import {getOrder} from "../../services/OrderService";
+import {getOrder, sendOrder} from "../../services/OrderService";
 import {getItems} from "../../services/MenuService";
 import {Order} from '../../order';
 import Button from "../../components/Button/Button";
 import {ButtonType} from "../../components/Button/ButtonType";
 
-interface StandbyProps {
+interface TableProps {
     t: any;
     navigate: any;
     location: any;
     searchParams: any;
 }
 
-interface StandbyState {
+interface TableState {
     order: Order;
     items: Items | null;
 }
 
-class TableWithoutHook extends React.Component<StandbyProps, StandbyState> {
+class TableWithoutHook extends React.Component<TableProps, TableState> {
 
-    constructor(props: StandbyProps) {
+    constructor(props: TableProps) {
         super(props);
         this.state = {
             items: null, // ou initialiser à [] ou à une valeur par défaut appropriée
@@ -33,21 +33,60 @@ class TableWithoutHook extends React.Component<StandbyProps, StandbyState> {
 
     componentDidMount() {
         const {t} = this.props;
-        const urlParams = this.props.searchParams.toString();
-        const tableId = this.props.searchParams.get('tableId');
-        if (!tableId) this.props.navigate('/error?' + urlParams, {state: {error: t('error.tableId')}});
-        // Utilisation de Promise.all pour attendre la fin des deux requêtes
-        Promise.all([getItems(), getOrder(tableId)]).then(values => {
-            const [items, order] = values;
-            this.setState({
-                items: items,
-                order: order
+
+        // check if the tableId is present in the session storage
+        let tableId = sessionStorage.getItem('tableId');
+        if (!tableId) {
+            tableId = this.props.searchParams.get('tableId');
+        }
+
+        if (tableId) {
+            sessionStorage.setItem('tableId', tableId);
+            this.props.navigate('/');
+            // Utilisation de Promise.all pour attendre la fin des deux requêtes
+            Promise.all([getItems(), getOrder(tableId)]).then(values => {
+                const [items, order] = values;
+                this.setState({
+                    items: items,
+                    order: order
+                });
+            }).catch(error => {
+                // Vous pouvez choisir de naviguer vers une page d'erreur ou de gérer l'erreur ici
+                console.error("An error occurred while fetching data:", error);
+                this.props.navigate('/error', {state: {error: t('error.fetchingData')}});
             });
-        }).catch(error => {
-            // Vous pouvez choisir de naviguer vers une page d'erreur ou de gérer l'erreur ici
-            console.error("An error occurred while fetching data:", error);
-            this.props.navigate('/error?' + urlParams, {state: {error: t('error.fetchingData')}});
-        });
+
+            setInterval(() => {
+                // @ts-ignore
+                getOrder(tableId).then(order => {
+                    this.setState({
+                        order: order
+                    });
+                }).catch(error => {
+                    // Vous pouvez choisir de naviguer vers une page d'erreur ou de gérer l'erreur ici
+                    console.error("An error occurred while fetching data:", error);
+                    this.props.navigate('/error', {state: {error: t('error.fetchingData')}});
+                });
+            }, 3000);
+
+        } else {
+            this.props.navigate('/error', {state: {error: t('error.tableId')}});
+        }
+    }
+
+    validate(props: Readonly<TableProps>) {
+        console.log(props)
+        const {t, navigate} = props;
+
+        let tableId = sessionStorage.getItem('tableId');
+        if(tableId) {
+            sendOrder(tableId).then(() => {
+                navigate('/game');
+            }).catch(error => {
+                console.error("An error occurred while sending data:", error);
+                navigate('/error', {state: {error: t('error.sendingData')}});
+            })
+        }
     }
 
     render() {
@@ -58,7 +97,7 @@ class TableWithoutHook extends React.Component<StandbyProps, StandbyState> {
         return <div className={styles.Table}>
             <main>
                 <Selection items={items} order={order}/>
-                <Button text={this.props.t("action.order")} type={ButtonType.Primary}></Button>
+                <Button text={this.props.t("action.order")} type={ButtonType.Primary} onClick={() =>this.validate(this.props)}></Button>
             </main>
         </div>;
     }

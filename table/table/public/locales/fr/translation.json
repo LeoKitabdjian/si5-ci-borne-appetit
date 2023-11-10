@@ -26,6 +26,6 @@
   "error": {
     "order": "Erreur lors de votre commande",
     "tableId": "L'association de cette tablette à une table n'est pas valide",
-    "noTable": "Aucune table de disponible"
+    "fetchingData": "Impossible de récupérer les données de la table"
   }
 }

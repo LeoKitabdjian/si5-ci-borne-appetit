@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 @Service
 public class PreparationService {
     @Value("${gateway_url}")
-
-    MenuService menuService;
     String apiUrl;
 
     private final MenuService menuService;

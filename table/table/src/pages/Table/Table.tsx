@@ -21,6 +21,8 @@ interface TableState {
     items: Items | null;
 }
 
+let menuInterval: any;
+
 class TableWithoutHook extends React.Component<TableProps, TableState> {
 
     constructor(props: TableProps) {
@@ -55,7 +57,7 @@ class TableWithoutHook extends React.Component<TableProps, TableState> {
                 this.props.navigate('/error', {state: {error: t('error.fetchingData')}});
             });
 
-            setInterval(() => {
+            menuInterval = setInterval(() => {
                 // @ts-ignore
                 getOrder(tableId).then(order => {
                     this.setState({
@@ -79,6 +81,7 @@ class TableWithoutHook extends React.Component<TableProps, TableState> {
         let tableId = sessionStorage.getItem('tableId');
         if(tableId) {
             sendOrder(tableId).then(() => {
+                clearInterval(menuInterval);
                 navigate('/game');
             }).catch(error => {
                 console.error("An error occurred while sending data:", error);

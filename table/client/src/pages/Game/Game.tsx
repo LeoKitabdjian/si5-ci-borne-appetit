@@ -11,17 +11,17 @@ interface GameProps {
 }
 
 const POLL_INTERVAL = 1;
-let paymentPolling;
 let paymentStarted = true;
 
 class GameWithoutHook extends React.Component<GameProps> {
-    
+
     startPolling() {
         hasPaymentStarted().then((r) => {
             if (r === true) {
                 console.log("Le paiement a commencé")
                 paymentStarted = true;
-                this.props.navigate('/payment?' + this.props.searchParams[0].toString());
+                console.log(this.props.searchParams);
+                this.props.navigate('/payment?' + this.props.searchParams);
             }
         }).catch((error) => {
             console.log(error)
@@ -47,7 +47,7 @@ class GameWithoutHook extends React.Component<GameProps> {
 
 function Game() {
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
+    const searchParams = useSearchParams()[0].toString();
     const [t] = useTranslation();
 
     return <GameWithoutHook navigate={navigate} searchParams={searchParams} t={t}/>;

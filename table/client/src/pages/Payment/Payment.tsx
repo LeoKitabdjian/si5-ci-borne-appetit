@@ -6,7 +6,11 @@ import {useTranslation} from "react-i18next";
 import {getClientAmount, hasPaymentStarted, payClient} from "../../services/BillingService";
 import {useNavigate, useSearchParams} from "react-router-dom";
 
-interface PaymentProps {}
+interface PaymentProps {
+    t: any;
+    navigate: any;
+    searchParams: any;
+}
 
 const POLL_INTERVAL = 1;
 
@@ -24,46 +28,54 @@ function pay() {
     })
 }
 
-const Payment: FC<PaymentProps> = () => {
-    const navigate = useNavigate();
-    const urlParams = useSearchParams()[0].toString();
-    const {t} = useTranslation();
-    getClientAmount().then((result) => {
-        console.log("Montant à payer", result);
-        // @ts-ignore
-        document.getElementById("amount").innerText = t('payment.amountToPay') + " : " + result + "€";
-    }).catch((error) => {
-        console.log(error);
-    })
-    const startPolling = () => {
-        return new Promise<void>((resolve, reject) => {
-            hasPaymentStarted().then((r) => {
-                if (r === false) {
-                    console.log("Le paiement est terminé")
-                    paymentFinished = true;
-                    resolve();
-                }
-            }).catch((error) => {
-                console.log(error)
-            }).finally(()=> {
-                if (!paymentFinished) {
-                    setTimeout(startPolling, POLL_INTERVAL * 1000);
-                }
-            })
+class PaymentWithoutHook extends React.Component<PaymentProps> {
+
+    startPolling() {
+        hasPaymentStarted().then((r) => {
+            if (r === false) {
+                console.log("Le paiement est terminé")
+                paymentFinished = true;
+                this.props.navigate('/?' + this.props.searchParams);
+            }
+        }).catch((error) => {
+            console.log(error)
+        }).finally(() => {
+            if (!paymentFinished) {
+                setTimeout(this.startPolling, POLL_INTERVAL * 1000);
+            }
         })
     }
-    startPolling().then(() => {
-        navigate('/?' + urlParams);
-    }).catch((error) => {
-        console.log(error);
-    })
-    return <div className={styles.Payment}>
-        <div id={"paymentContainer"} className={styles.paymentContainer}>
-            <div id={"amount"}></div>
-            <Button onClick={pay} text={t('payment.pay')} type={ButtonType.Primary}/>
+
+    componentDidMount() {
+        const {t} = this.props;
+        getClientAmount().then((result) => {
+            console.log("Montant à payer", result);
+            // @ts-ignore
+            document.getElementById("amount").innerText = t('payment.amountToPay') + " : " + result + "€";
+        }).catch((error) => {
+            console.log(error);
+        })
+        this.startPolling();
+    }
+
+    render() {
+        const {t} = this.props;
+        return <div className={styles.Payment}>
+            <div id={"paymentContainer"} className={styles.paymentContainer}>
+                <div id={"amount"}></div>
+                <Button onClick={pay} text={t('payment.pay')} type={ButtonType.Primary}/>
+            </div>
+            <div id={"paymentDone"} className={styles.paymentDone}>{t('payment.done')}</div>
         </div>
-        <div id={"paymentDone"} className={styles.paymentDone}>{t('payment.done')}</div>
-    </div>
-};
+    }
+}
+
+function Payment() {
+    const navigate = useNavigate();
+    const searchParams = useSearchParams()[0].toString();
+    const [t] = useTranslation();
+
+    return <PaymentWithoutHook navigate={navigate} searchParams={searchParams} t={t}/>;
+}
 
 export default Payment;

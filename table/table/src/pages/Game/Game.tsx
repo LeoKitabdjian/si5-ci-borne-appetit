@@ -41,6 +41,7 @@ class GameWithoutHook extends React.Component<GameProps, GameState> {
     startPayment(props: GameProps) {
         if (tableId) {
             startTablePayment(tableId).then(() => {
+                clearInterval(this.preparationInterval);
                 props.navigate('/payment?' + props.searchParams);
             }).catch((error) => {
                 console.log(error);

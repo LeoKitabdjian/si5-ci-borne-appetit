@@ -81,6 +81,7 @@ public class BillingService {
         }
         try {
             sendPostRequestBilling(tableId);
+            clientOrderRepository.deleteOrdersByTableId(tableId);
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -91,6 +92,7 @@ public class BillingService {
         if (isEveryClientBilledExceptOne(tableId, clientId)){
             try {
                 sendPostRequestBilling(tableId);
+                clientOrderRepository.deleteOrdersByTableId(tableId);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }

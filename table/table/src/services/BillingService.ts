@@ -44,7 +44,7 @@ export function getTableAmount(tableId: string) {
                 'Content-Type': 'application/json'
             }
         }).then((response) => response.json()).then(result => {
-            console.log(result);
+            console.log("Montant à payer", result);
             resolve(result);
         }).catch((error) => {
             console.log(error);

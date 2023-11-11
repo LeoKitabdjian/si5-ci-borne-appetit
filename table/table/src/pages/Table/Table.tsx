@@ -74,6 +74,10 @@ class TableWithoutHook extends React.Component<TableProps, TableState> {
         }
     }
 
+    componentWillUnmount() {
+        clearInterval(menuInterval);
+    }
+
     validate(props: Readonly<TableProps>) {
         console.log(props)
         const {t, navigate} = props;

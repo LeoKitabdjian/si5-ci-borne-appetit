@@ -12,37 +12,42 @@ interface PaymentProps {
     searchParams: any;
 }
 
-const POLL_INTERVAL = 1;
-
-let paymentFinished = false;
-
-function pay() {
-    console.log("Paying...");
-    payClient().then((r) => {
-        // @ts-ignore
-        document.getElementById("paymentContainer").style.display = "none";
-        // @ts-ignore
-        document.getElementById("paymentDone").style.display = "block";
-    }).catch((error) => {
-        console.log(error);
-    })
-}
+const POLL_INTERVAL = 3;
 
 class PaymentWithoutHook extends React.Component<PaymentProps> {
 
-    startPolling() {
+    constructor(props: PaymentProps) {
+        super(props);
+        this.state = {
+            preparations: {
+                ready: [], started: [],
+            }
+        };
+    }
+
+    pollingInterval: any;
+
+    pay() {
+        console.log("Paying...");
+        payClient().then((r) => {
+            // @ts-ignore
+            document.getElementById("paymentContainer").style.display = "none";
+            // @ts-ignore
+            document.getElementById("paymentDone").style.display = "block";
+        }).catch((error) => {
+            console.log(error);
+        })
+    }
+
+    startPolling(props: PaymentProps) {
         hasPaymentStarted().then((r) => {
             if (r === false) {
                 console.log("Le paiement est terminé")
-                paymentFinished = true;
-                this.props.navigate('/?' + this.props.searchParams);
+                clearInterval(this.pollingInterval);
+                props.navigate('/?' + this.props.searchParams);
             }
         }).catch((error) => {
             console.log(error)
-        }).finally(() => {
-            if (!paymentFinished) {
-                setTimeout(this.startPolling, POLL_INTERVAL * 1000);
-            }
         })
     }
 
@@ -55,7 +60,11 @@ class PaymentWithoutHook extends React.Component<PaymentProps> {
         }).catch((error) => {
             console.log(error);
         })
-        this.startPolling();
+        this.pollingInterval = setInterval(() => this.startPolling(this.props), POLL_INTERVAL * 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.pollingInterval);
     }
 
     render() {
@@ -63,7 +72,7 @@ class PaymentWithoutHook extends React.Component<PaymentProps> {
         return <div className={styles.Payment}>
             <div id={"paymentContainer"} className={styles.paymentContainer}>
                 <div id={"amount"}></div>
-                <Button onClick={pay} text={t('payment.pay')} type={ButtonType.Primary}/>
+                <Button onClick={this.pay} text={t('payment.pay')} type={ButtonType.Primary}/>
             </div>
             <div id={"paymentDone"} className={styles.paymentDone}>{t('payment.done')}</div>
         </div>

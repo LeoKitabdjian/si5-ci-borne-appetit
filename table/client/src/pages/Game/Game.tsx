@@ -10,30 +10,40 @@ interface GameProps {
     searchParams: any;
 }
 
-const POLL_INTERVAL = 1;
-let paymentStarted = false;
+const POLL_INTERVAL = 3;
 
 class GameWithoutHook extends React.Component<GameProps> {
 
-    startPolling() {
+    pollingInterval: any;
+
+    constructor(props: GameProps) {
+        super(props);
+        this.state = {
+            preparations: {
+                ready: [], started: [],
+            }
+        };
+    }
+
+    startPolling(props: GameProps) {
         hasPaymentStarted().then((r) => {
             if (r === true) {
                 console.log("Le paiement a commencé")
-                paymentStarted = true;
                 console.log(this.props.searchParams);
-                this.props.navigate('/payment?' + this.props.searchParams);
+                clearInterval(this.pollingInterval);
+                props.navigate('/payment?' + this.props.searchParams);
             }
         }).catch((error) => {
             console.log(error)
-        }).finally(() => {
-            if (!paymentStarted) {
-                setTimeout(this.startPolling, POLL_INTERVAL * 1000);
-            }
         })
     }
 
     componentDidMount() {
-        this.startPolling();
+        this.pollingInterval = setInterval(() => this.startPolling(this.props), POLL_INTERVAL * 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.pollingInterval);
     }
 
     render() {

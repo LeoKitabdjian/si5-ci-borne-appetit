@@ -26,6 +26,9 @@ if (!tableId) {
 
 class PaymentWithoutHook extends React.Component<PaymentProps> {
 
+    paymentInterval : any;
+    amountInterval : any;
+
     pay() {
         console.log("Paying...");
         if (tableId) {
@@ -40,45 +43,43 @@ class PaymentWithoutHook extends React.Component<PaymentProps> {
         }
     }
 
-    startPaymentPolling() {
+    startPaymentPolling(props: PaymentProps) {
         if (tableId) {
             hasPaymentStarted(tableId).then((r) => {
                 if (r === false) {
                     console.log("Le paiement est terminé")
-                    paymentFinished = true;
-                    this.props.navigate('/?' + this.props.urlParams);
+                    clearInterval(this.amountInterval);
+                    clearInterval(this.paymentInterval);
+                    props.navigate('/?' + this.props.urlParams);
                 }
             }).catch((error) => {
                 console.log(error)
-            }).finally(() => {
-                if (!paymentFinished) {
-                    setTimeout(this.startPaymentPolling, POLL_INTERVAL * 1000);
-                }
             })
         }
     }
 
-    startAmountPolling() {
+    startAmountPolling(props: PaymentProps) {
         if (tableId) {
             getTableAmount(tableId).then((result) => {
-                console.log("Montant à payer", result);
                 if (!paymentFinished) {
                     // @ts-ignore
-                    document.getElementById("amount").innerText = t('payment.amountToPay') + " : " + result + "€";
+                    document.getElementById("amount").innerText = props.t('payment.amountToPay') + " : " + result + "€";
                 }
             }).catch((error) => {
                 console.log(error);
-            }).finally(() => {
-                if (!paymentFinished) {
-                    setTimeout(this.startAmountPolling, POLL_INTERVAL * 1000);
-                }
             })
         }
     }
 
     componentDidMount() {
-        this.startPaymentPolling();
-        this.startAmountPolling();
+        this.startAmountPolling(this.props);
+        setTimeout(() => this.paymentInterval = setInterval(() => this.startPaymentPolling(this.props), POLL_INTERVAL * 1000, 1000));
+        this.amountInterval = setInterval(() => this.startAmountPolling(this.props), POLL_INTERVAL * 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.amountInterval);
+        clearInterval(this.paymentInterval);
     }
 
     render() {

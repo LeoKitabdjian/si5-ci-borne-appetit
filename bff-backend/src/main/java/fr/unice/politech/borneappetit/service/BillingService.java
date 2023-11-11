@@ -95,18 +95,21 @@ public class BillingService {
         if (clientOrderEntity.isPresent()) {
             ClientOrderEntity update = clientOrderEntity.get();
             update.billed = true;
-            return this.clientOrderRepository.save(update);
-        }
-
-        if (isEveryClientBilled(tableId)){
-            try {
-                sendPostRequestBilling(orderUuid);
-                clientOrderRepository.deleteOrdersByTableId(tableId);
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
+            this.clientOrderRepository.save(update);
+            if (isEveryClientBilled(tableId)){
+                try {
+                    sendPostRequestBilling(orderUuid);
+                    clientOrderRepository.deleteOrdersByTableId(tableId);
+                    return null;
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+            else {
+                return this.clientOrderRepository.save(update);
             }
         }
-
         return null;
     }
 

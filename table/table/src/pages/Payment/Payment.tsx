@@ -15,7 +15,7 @@ interface PaymentProps {
     urlParams: any;
 }
 
-const POLL_INTERVAL = 1;
+const POLL_INTERVAL = 2;
 
 let paymentFinished = false;
 let tableId = sessionStorage.getItem('tableId');

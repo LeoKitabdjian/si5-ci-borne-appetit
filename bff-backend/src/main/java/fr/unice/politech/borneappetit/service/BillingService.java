@@ -76,11 +76,12 @@ public class BillingService {
 
     public List<ClientOrderEntity> payRemainingForTable(Long tableId) {
         List<ClientOrderEntity> orders = this.clientOrderRepository.findNotBilledOrdersForTable(tableId);
+        String orderUuid = orders.get(0).orderUuid;
         for (ClientOrderEntity order : orders) {
             order.billed = true;
         }
         try {
-            sendPostRequestBilling(tableId);
+            sendPostRequestBilling(orderUuid);
             clientOrderRepository.deleteOrdersByTableId(tableId);
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -89,34 +90,38 @@ public class BillingService {
     }
 
     public ClientOrderEntity payForClient(Long tableId, Long clientId) {
-        if (isEveryClientBilledExceptOne(tableId, clientId)){
-            try {
-                sendPostRequestBilling(tableId);
-                clientOrderRepository.deleteOrdersByTableId(tableId);
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
-        }
         Optional<ClientOrderEntity> clientOrderEntity = this.clientOrderRepository.findNotBilledByTableIdAndClientId(tableId, clientId);
+        String orderUuid = clientOrderEntity.get().orderUuid;
         if (clientOrderEntity.isPresent()) {
             ClientOrderEntity update = clientOrderEntity.get();
             update.billed = true;
             return this.clientOrderRepository.save(update);
         }
+
+        if (isEveryClientBilled(tableId)){
+            try {
+                sendPostRequestBilling(orderUuid);
+                clientOrderRepository.deleteOrdersByTableId(tableId);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+        }
+
         return null;
     }
 
-    public boolean isEveryClientBilledExceptOne(Long tableId,Long clientId) {
-        for (ClientOrderEntity order : this.clientOrderRepository.findNotBilledOrdersForTable(tableId)) {
-            if (!order.isBilled() && !order.getClientId().equals(clientId)) {
+    public boolean isEveryClientBilled(Long tableId) {
+        List<ClientOrderEntity> orders = this.clientOrderRepository.findNotBilledOrdersForTable(tableId);
+        for (ClientOrderEntity order : orders) {
+            if (!order.isBilled()) {
                 return false;
             }
         }
         return true;
     }    
 
-    public void sendPostRequestBilling(Long tableId) throws URISyntaxException{
-        String url = apiUrl+"/dining/tableOrders/"+tableService.getTableOrderIdFromTableNumber(tableId)+"/bill";
+    public void sendPostRequestBilling(String id) throws URISyntaxException{
+        String url = apiUrl+"/dining/tableOrders/"+id+"/bill";
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);

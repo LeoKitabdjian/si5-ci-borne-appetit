@@ -30,7 +30,8 @@
     "error": "Identifiant de table manquant sur votre tablette."
   },
   "game": {
-    "welcome": "Ceci est un jeu"
+    "welcome": "Page de jeu",
+    "description": "Vous pouvez jouer à un jeu pendant que vous attendez votre commande !"
   },
   "payment": {
     "pay": "Payer ma part",

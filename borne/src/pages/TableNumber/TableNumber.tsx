@@ -2,8 +2,6 @@ import React from 'react';
 import styles from './TableNumber.module.sass';
 import {useLocation, useNavigate} from "react-router-dom";
 import {Trans, useTranslation} from "react-i18next";
-import Button from "../../components/Button/Button";
-import {ButtonType} from "../../components/Button/ButtonType";
 
 const TIME_UNTIL_RETURN = 8;
 const TableNumber = () => {

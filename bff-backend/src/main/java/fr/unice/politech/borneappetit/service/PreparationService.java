@@ -62,11 +62,11 @@ public class PreparationService {
         Preparation[] startedPreparations = get(tableNumber, "preparationStarted");
 
         List<Map<String, Long>> readyCounts = Arrays.stream(readyPreparations)
-                .map(preparation -> countPreparedItems(preparation.getPreparedItems()))
+                .map(preparation -> countPreparedItems2(preparation.getPreparedItems()))
                 .collect(Collectors.toList());
 
         List<Map<String, Long>> startedCounts = Arrays.stream(startedPreparations)
-                .map(preparation -> countPreparedItems(preparation.getPreparedItems()))
+                .map(preparation -> countPreparedItems2(preparation.getPreparedItems()))
                 .collect(Collectors.toList());
 
         result.put("ready", readyCounts);
@@ -86,5 +86,15 @@ public class PreparationService {
                     }
                     return cookedItem.getShortName();
                 }, Collectors.counting()));
+    }
+
+    private Map<String, Long> countPreparedItems2(List<CookedItem> items) {
+        return items.stream()
+                .collect(Collectors.groupingBy(CookedItem::getShortName, Collectors.counting()))
+                .entrySet().stream()
+                .collect(Collectors.toMap(
+                        entry -> menuService.getIdWithShortName(entry.getKey()),  // Replace with your actual function
+                        Map.Entry::getValue
+                ));
     }
 }

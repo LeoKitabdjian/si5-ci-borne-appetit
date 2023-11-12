@@ -44,4 +44,14 @@ public class MenuService {
             default -> Comparator.comparing(MenuDto::getFullName); // sort by fullName by default
         };
     }
+
+    public String getIdWithShortName(String shortName) {
+        MenuDto[] menus = getAll();
+        for (MenuDto menu : menus) {
+            if (menu.getShortName().equals(shortName)) {
+                return menu.getId();
+            }
+        }
+        return null;
+    }
 }

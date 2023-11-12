@@ -22,11 +22,40 @@
   .Order
     background: white
     border-radius: 2vh
+    padding: 2vh
+    display: grid
+    grid-template-rows: min-content 1fr min-content
+    gap: 2vh
     @include shadow
+
+    .Items
+      display: flex
+      flex-direction: column
+      gap: 2vh
+      height: 75vh
+      overflow-y: auto
+      @include scrollbar
+
+      &::-webkit-scrollbar-track
+        background: white
+
+      &::-webkit-scrollbar-thumb
+        border-left: 1vh solid white
+
+
+    ul
+      display: flex
+      flex-direction: column
+      gap: 2vh
+
     h2
-      padding: 1rem
-      font-size: 1.5vh
+      font-size: 1.75vh
       font-weight: 600
       text-transform: uppercase
       user-select: none
+
+    h3
+      font-size: 1.5vh
+      text-transform: uppercase
+      font-weight: bold
 

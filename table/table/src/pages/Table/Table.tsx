@@ -21,6 +21,8 @@ interface TableState {
     items: Items | null;
 }
 
+let menuInterval: any;
+
 class TableWithoutHook extends React.Component<TableProps, TableState> {
 
     constructor(props: TableProps) {
@@ -51,19 +53,17 @@ class TableWithoutHook extends React.Component<TableProps, TableState> {
                     order: order
                 });
             }).catch(error => {
-                // Vous pouvez choisir de naviguer vers une page d'erreur ou de gérer l'erreur ici
                 console.error("An error occurred while fetching data:", error);
                 this.props.navigate('/error', {state: {error: t('error.fetchingData')}});
             });
 
-            setInterval(() => {
+            menuInterval = setInterval(() => {
                 // @ts-ignore
                 getOrder(tableId).then(order => {
                     this.setState({
                         order: order
                     });
                 }).catch(error => {
-                    // Vous pouvez choisir de naviguer vers une page d'erreur ou de gérer l'erreur ici
                     console.error("An error occurred while fetching data:", error);
                     this.props.navigate('/error', {state: {error: t('error.fetchingData')}});
                 });
@@ -74,6 +74,10 @@ class TableWithoutHook extends React.Component<TableProps, TableState> {
         }
     }
 
+    componentWillUnmount() {
+        clearInterval(menuInterval);
+    }
+
     validate(props: Readonly<TableProps>) {
         console.log(props)
         const {t, navigate} = props;
@@ -81,6 +85,7 @@ class TableWithoutHook extends React.Component<TableProps, TableState> {
         let tableId = sessionStorage.getItem('tableId');
         if(tableId) {
             sendOrder(tableId).then(() => {
+                clearInterval(menuInterval);
                 navigate('/game');
             }).catch(error => {
                 console.error("An error occurred while sending data:", error);

@@ -33,14 +33,18 @@ public class BillingService {
     }
 
     public boolean isBillingStartForTable(Long tableId) {
+        System.out.println("Demande pour savoir si la facturation a commencé pour la table " + tableId);
         List<ClientOrderEntity> orders = this.clientOrderRepository.findNotBilledOrdersForTable(tableId);
         if (!orders.isEmpty()) {
+            System.out.println("La facturation est dans l'était suivant : " +orders.get(0).billingStarted+" pour la table :"+ tableId);
             return orders.get(0).billingStarted;
         }
+        System.out.println("La facturation n'a pas commencé pour la table " + tableId);
         return false;
     }
 
     public boolean startBillingStartForTable(Long tableId) {
+        System.out.println("Debut de la facturation pour la table " + tableId);
         List<ClientOrderEntity> orders = this.clientOrderRepository.findNotBilledOrdersForTable(tableId);
         if (!isBillingStartForTable(tableId)) {
             for (ClientOrderEntity order : orders) {
@@ -53,11 +57,13 @@ public class BillingService {
     }
 
     public double getBillingForClient(Long tableId, Long clientId) {
+        System.out.println("Demande de la facture pour le client " + clientId + " de la table " + tableId);
         for (ClientOrderEntity order : this.clientOrderRepository.findNotBilledOrdersForTable(tableId)) {
             if (Objects.equals(order.getClientId(), clientId)) {
                 if (order.isBilled()) {
                     return 0;
                 }
+                System.out.println("Facture pour le client " + clientId + " de la table " + tableId + " : " + order.getPrice());
                 return order.getPrice();
             }
         }
@@ -66,22 +72,28 @@ public class BillingService {
 
     public double getRemainingBillForTable(Long tableId) {
         double cost = 0;
+        System.out.println("Demande de la facture restante pour la table " + tableId);
         for (ClientOrderEntity order : this.clientOrderRepository.findNotBilledOrdersForTable(tableId)) {
             if (!order.isBilled()) {
                 cost += order.getPrice();
             }
         }
+        System.out.println("Facture restante pour la table " + tableId + " : " + cost);
         return cost;
     }
 
     public List<ClientOrderEntity> payRemainingForTable(Long tableId) {
+        System.out.println("Paiement de la facture restante pour la table " + tableId);
         List<ClientOrderEntity> orders = this.clientOrderRepository.findNotBilledOrdersForTable(tableId);
+        System.out.println("Récupération de l'identifiant de la commande dans la base de Données microservices pour la table " + tableId);
         String orderUuid = orders.get(0).orderUuid;
         for (ClientOrderEntity order : orders) {
             order.billed = true;
         }
         try {
+            System.out.println("Envoi de la requête de paiement de la facture restante pour la table " + tableId + " au microservice billing");
             sendPostRequestBilling(orderUuid);
+            System.out.println("Suppression des commandes de la table " + tableId + " dans la base de Données du BFF");
             clientOrderRepository.deleteOrdersByTableId(tableId);
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -90,7 +102,9 @@ public class BillingService {
     }
 
     public ClientOrderEntity payForClient(Long tableId, Long clientId) {
+        System.out.println("Paiement de la facture pour le client " + clientId + " de la table " + tableId);
         Optional<ClientOrderEntity> clientOrderEntity = this.clientOrderRepository.findNotBilledByTableIdAndClientId(tableId, clientId);
+        System.out.println("Récupération de l'identifiant de la commande dans la base de Données microservices pour le client " + clientId + " de la table " + tableId);
         String orderUuid = clientOrderEntity.get().orderUuid;
         if (clientOrderEntity.isPresent()) {
             ClientOrderEntity update = clientOrderEntity.get();
@@ -99,7 +113,9 @@ public class BillingService {
             if (isEveryClientBilled(tableId)){
                 try {
                     sendPostRequestBilling(orderUuid);
+                    System.out.println("Il s'agit du dernier client, envoi de la requête de paiement de la facture restante pour la table " + tableId + " au microservice billing");
                     clientOrderRepository.deleteOrdersByTableId(tableId);
+                    System.out.println("Et suppression des commandes de la table " + tableId + " dans la base de Données du BFF");
                     return null;
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
@@ -107,6 +123,7 @@ public class BillingService {
                 }
             }
             else {
+                 System.out.println("Simple sauvegarde du payement de la commande individuelle dans la base de Données du BFF");
                 return this.clientOrderRepository.save(update);
             }
         }

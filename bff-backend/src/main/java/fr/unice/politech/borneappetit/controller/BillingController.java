@@ -46,8 +46,6 @@ public class BillingController {
     @Operation(summary ="Pay all unpaid order for the table")
     public ResponseEntity payTable(@PathVariable Long tableId){
         if (this.billingService.isBillingStartForTable(tableId)) {
-            // todo: payment in the microservices
-            System.out.println("todo: payment in the microservices");
             return ResponseEntity.ok(this.billingService.payRemainingForTable(tableId));
         } else {
             return ResponseEntity.status(409).body("Impossible to bill for a table for which billing has not yet begun");

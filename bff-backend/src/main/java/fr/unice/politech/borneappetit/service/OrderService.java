@@ -86,8 +86,9 @@ public class OrderService {
     }
 
     public Map<Long, Map<String, Object>> getOrderForTable(Long tableId) {
+        
         List<ClientOrderEntity> unordered = this.clientOrderRepository.findNotOrderedOrdersForTable(tableId);
-
+        System.out.println("Lecture des commandes non validées de la table " + tableId + " dans le BFF");
         Map<Long, Map<String, Object>> response = new HashMap<>();
 
         unordered.forEach(order -> {
@@ -97,7 +98,7 @@ public class OrderService {
 
             response.put(order.getClientId(), clientOrder);
         });
-
+        System.out.println("Retour des commandes non validées de la table " + tableId + " dans le BFF");
         return response;
     }
 
@@ -105,9 +106,9 @@ public class OrderService {
      * Send unordered to ordered
      */
     public Map sendOrder(Long tableId) throws Exception {
-        System.out.println("Reservation de la table dans le microservice via le gateway");
+        System.out.println("Lecture des commandes non validées de la table " + tableId + " dans le BFF");
         List<ClientOrderEntity> unordered = this.clientOrderRepository.findNotOrderedOrdersForTable(tableId);
-
+        System.out.println("Reservation de la table dans le microservice via le gateway");
         TableOrder tableOrder = tableService.makeReservation(Math.toIntExact(tableId), (int) unordered.stream()
                 .map(ClientOrderEntity::getClientId)
                 .distinct()
@@ -115,7 +116,7 @@ public class OrderService {
 
         Map<String, MenuDto> menusMap = Arrays.stream(this.menuService.getAll())
                 .collect(Collectors.toMap(MenuDto::getId, menu -> menu));
-        System.out.println("Ajout des items à la table");
+        System.out.println("Creation de la commande dans le BFF pour un envoi au microservice via le gateway avec la liste des commandes non validées");
         for (ClientOrderEntity o : unordered) {
             for (Map.Entry<String, Integer> entry : o.items.entrySet()) {
                 String menuId = entry.getKey();
@@ -125,6 +126,7 @@ public class OrderService {
                 tableOrder = tableService.addItemToTable(tableOrder.getId(), menuId, menu.getShortName(), howMany);
             }
             o.setOrderUuid(tableOrder.getId());
+            System.out.println("Ajout de id de la commande (MongoDB) dans la Base de Données du BFF");
             this.clientOrderRepository.save(o);
         }
 
@@ -142,6 +144,7 @@ public class OrderService {
 
 
     public void markUnorderedOrdersAsOrdered(Long tableId) {
+        System.out.println("Changement de l'état des commandes non validées de la table " + tableId + " dans le BFF à un état validé");
         List<ClientOrderEntity> unorderedOrders = clientOrderRepository.findNotOrderedOrdersForTable(tableId);
 
         for (ClientOrderEntity order : unorderedOrders) {

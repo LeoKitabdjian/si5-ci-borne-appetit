@@ -56,7 +56,7 @@ class PaymentWithoutHook extends React.Component<PaymentProps> {
         getClientAmount().then((result) => {
             console.log("Montant à payer", result);
             // @ts-ignore
-            document.getElementById("amount").innerText = t('payment.amountToPay') + " : " + result + "€";
+            document.getElementById("amount").innerText = t('payment.amountToPay') + "\n" + result + "€";
         }).catch((error) => {
             console.log(error);
         })
@@ -71,7 +71,7 @@ class PaymentWithoutHook extends React.Component<PaymentProps> {
         const {t} = this.props;
         return <div className={styles.Payment}>
             <div id={"paymentContainer"} className={styles.paymentContainer}>
-                <div id={"amount"}></div>
+                <div id={"amount"} className={styles.Amount}></div>
                 <Button onClick={this.pay} text={t('payment.pay')} type={ButtonType.Primary}/>
             </div>
             <div id={"paymentDone"} className={styles.paymentDone}>{t('payment.done')}</div>

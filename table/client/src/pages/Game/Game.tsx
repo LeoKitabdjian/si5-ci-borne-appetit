@@ -51,6 +51,7 @@ class GameWithoutHook extends React.Component<GameProps> {
         const {t} = this.props;
         return <div className={styles.Game}>
             <h2>{t('game.welcome')}</h2>
+            <h3>{t('game.description')}</h3>
         </div>
     }
 }
